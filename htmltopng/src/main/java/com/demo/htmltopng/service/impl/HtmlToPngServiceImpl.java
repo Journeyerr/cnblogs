@@ -28,21 +28,27 @@ import java.util.UUID;
 
 /**
  * @author AnYuan
- * 生成png服务接口
+ * 生成png服务实现
  */
 
 @Slf4j
 @Service
 public class HtmlToPngServiceImpl implements HtmlToPngService {
 
+    /**
+     * Mock 数据
+     * @return Map<String, String>
+     */
     private Map<String, String> getUser() {
-        Map info = new HashMap(2);
+
+        HashMap info = new HashMap(2);
         info.put("age", "18");
-        info.put("url", "https://static.heytea.com/taro_trial/v1/img/my/me_img_head_login.png");
+        info.put("url", "https://pic.cnblogs.com/avatar/2319511/20210304170859.png");
 
         Map user = new HashMap(2);
-        user.put("user", "张三");
+        user.put("user", "安逺");
         user.put("info", info);
+
         return user;
     }
 
@@ -52,41 +58,49 @@ public class HtmlToPngServiceImpl implements HtmlToPngService {
     @Override
     public void htmlToPng() throws Exception {
 
+        // 查询模版条件
+        String templateCode = "T001";
+
+        // png图片宽度
         int width = 220;
+        // png图片高度
         int height = 150;
 
-        // 查询一个模版
-        Template template = configuration.getConfiguration().getTemplate("T001");
-        // 替换模版参数
+        // 从数据库查询一个模版
+        Template template = configuration.getConfiguration().getTemplate(templateCode);
+        // 将数据替换模版里面的参数
         String readyParsedTemplate = FreeMarkerTemplateUtils.processTemplateIntoString(template, getUser());
 
+        // 创建一个字节流
         InputStream is = new ByteArrayInputStream(readyParsedTemplate.getBytes(StandardCharsets.UTF_8));
+        // 创建一个文档资源
         DocumentSource docSource = new StreamDocumentSource(is, null, "text/html; charset=utf-8");
+        // 创建一个文件流
+        String fileName = UUID.randomUUID().toString();
+        FileOutputStream out = new FileOutputStream("./" + new File(fileName + ".png"));
 
-        FileOutputStream out = new FileOutputStream("./" + new File(UUID.randomUUID().toString() + ".png"));
         try {
-            DOMSource parser = new DefaultDOMSource(docSource);
 
+            // 解析输入文档
+            DOMSource parser = new DefaultDOMSource(docSource);
+            // 创建CSS解析器
             DOMAnalyzer da = new DOMAnalyzer(parser.parse(), docSource.getURL());
+
+            // 设置样式属性
             da.attributesToStyles();
             da.addStyleSheet(null, CSSNorm.stdStyleSheet(), DOMAnalyzer.Origin.AGENT);
             da.addStyleSheet(null, CSSNorm.userStyleSheet(), DOMAnalyzer.Origin.AGENT);
             da.addStyleSheet(null, CSSNorm.formsStyleSheet(), DOMAnalyzer.Origin.AGENT);
             da.getStyleSheets();
-
             BrowserCanvas contentCanvas = new BrowserCanvas(da.getRoot(), da, docSource.getURL());
             contentCanvas.createLayout(new Dimension(width, height));
 
+            // 生成png文件
             ImageIO.write(contentCanvas.getImage(), "png", out);
-
-//
-//            String md5;
-//            try (FileInputStream fileInputStream = new FileInputStream(tmpFile)) {
-//                md5 = DigestUtils.md5Hex(fileInputStream);
-//            }
 
         } catch (Exception e) {
            log.info("HtmlToPng Exception", e);
+
         } finally {
             out.close();
             is.close();
