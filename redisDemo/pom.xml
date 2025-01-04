@@ -7,7 +7,7 @@
         <version>2.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.demo</groupId>
+    <groupId>com.cnblog</groupId>
     <artifactId>redisdemo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>redisdemo</name>
