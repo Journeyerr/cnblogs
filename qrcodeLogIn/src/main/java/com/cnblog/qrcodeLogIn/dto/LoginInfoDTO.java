@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginInfo {
+public class LoginInfoDTO {
     
     /**
      * 唯一标识

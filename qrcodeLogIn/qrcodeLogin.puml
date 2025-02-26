@@ -1,0 +1,31 @@
+@startuml
+participant 手机端     as phone
+participant PC端      as pc
+participant 服务端     as service
+queue       Redis       as redis
+
+pc -> service : 发起二维码登录请求
+service -> service  : 生成带uuid的二维码
+service -> redis: 存储二维码状态：待扫码
+service -> pc : 返回二维码图片和状态
+
+pc-->pc: 等待扫码
+pc --> service : 页面轮询查询二维码状态
+
+phone->pc : 手机扫描二维码
+phone->service : 携带二维码uuid\n手机端token
+service -> redis  : 通过uuid获取二维码状态
+service -> service  : 将手机token和二维码关联、生成临时token
+service -> redis  : 更新二维码状态为：待确认
+service -> phone :  返回临时token
+
+phone-->phone: 等待确认
+pc --> service : 页面轮询查询二维码状态
+
+phone -> service : 携带二维码uuid、临时token，发起确认登录请求
+service -> service  : 校验临时token、生成效期token
+service->redis :更新二维码状态为：已确认
+pc --> service : 页面轮询查询二维码状态
+service->pc: 返回效期token
+pc->pc : 登录成功
+@enduml
