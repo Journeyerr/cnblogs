@@ -9,4 +9,5 @@
    
 - #### <span style="background:#f6f8fa;">websocket : [Java 集成WebSocket实现实时通讯](https://www.cnblogs.com/anyuan/p/14886560.html)</span>
    
+- #### <span style="background:#f6f8fa;">qrcodeLogin : [Java SpringBoot实现简易扫码登录流程](https://www.cnblogs.com/anyuan/p/14886560.html)</span>
 
