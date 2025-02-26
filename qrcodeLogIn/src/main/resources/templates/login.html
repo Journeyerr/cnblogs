@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录界面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-container .forgot-password {
+            margin-top: 15px;
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-container .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-container .register-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-container .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .login-container .register-link a:hover {
+            text-decoration: underline;
+        }
+        .blur-image {
+            filter: blur(3px); /* 你可以调整8px的值来改变模糊程度 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>扫码登录</h2>
+    <div id="qrcode-container">
+        <img id="qrcode-img" src="" alt="QR Code" class="">
+        <div id="status"></div>
+    </div>
+    <a href="#" class="forgot-password" id="forgetPsw">忘记密码？</a>
+    <div class="register-link" id="signUp">
+        还没有账号？ <a href="#">立即注册</a>
+    </div>
+</div>
+<script>
+
+    let currentUUID = null;
+    let host = "http://localhost:8080";
+
+    // 初始化二维码
+    function initQRCode() {
+        fetch(host+'/api/qrcode/generate')
+            .then(res => res.json())
+            .then(data => {
+                currentUUID = data.uuid;
+                document.getElementById('qrcode-img').src = data.qrcode;
+                startPolling();
+            });
+    }
+
+    // 轮询检查状态
+    function startPolling() {
+        const interval = setInterval(() => {
+            fetch(host+`/api/qrcode/check/${currentUUID}`)
+                .then(res => {
+                    if(res.status === 410) {
+                        clearInterval(interval);
+                        showStatus('二维码已过期，请刷新页面');
+                        return;
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if(data.status === 'CONFIRMED') {
+                        clearInterval(interval);
+                        handleLoginSuccess(data.token);
+                    } else if(data.status === 'SCANNED') {
+                        showStatus('已扫描，请在手机上确认登录');
+                    }
+                });
+        }, 2000);
+    }
+
+    function handleLoginSuccess(token) {
+        localStorage.setItem('authToken', token);
+        window.location.href = '/home';
+    }
+
+    function showStatus(msg) {
+        document.getElementById('status').innerHTML = msg;
+        document.getElementById('forgetPsw').innerHTML="";
+        document.getElementById('signUp').innerHTML="";
+        document.getElementById('qrcode-img').className = 'blur-image';
+    }
+
+    // 初始化
+    initQRCode();
+</script>
+</body>
+</html>
