@@ -23,9 +23,13 @@ public class Order {
     private String subject;
     
     /**
-     * 支付类型
+     * 支付方式
      */
     private String paymentType;
     
+    /**
+     * 交易类型 PC APP
+     */
+    private String tradeType;
 
 }

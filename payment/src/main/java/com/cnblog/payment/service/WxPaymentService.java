@@ -3,6 +3,7 @@ package com.cnblog.payment.service;
 import com.cnblog.payment.config.WxPayProperties;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.enums.WxTradeTypeEnum;
 import com.github.binarywang.wxpay.bean.request.WxPayOrderQueryRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -35,14 +36,15 @@ public class WxPaymentService extends PaymentService{
                 .totalFee(order.getAmount().multiply(BigDecimal.valueOf(100)).intValue())
                 .body(order.getSubject())
                 .spbillCreateIp("127.0.0.1")
+                .tradeType(WxTradeTypeEnum.getByName(order.getTradeType()).getTradeType())
                 .notifyUrl(properties.getNotifyUrl())
-                .tradeType(properties.getTradeType())
                 .build();
             WxPayUnifiedOrderResult result = wxPayService.unifiedOrder(request);
     
             return Response.success(result);
             
         }catch ( Exception e) {
+            log.info("请求微信支付失败：{}", e);
             return Response.fail(e.getMessage());
         }
     }

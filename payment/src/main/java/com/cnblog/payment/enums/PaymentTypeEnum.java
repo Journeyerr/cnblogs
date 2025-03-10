@@ -2,24 +2,31 @@ package com.cnblog.payment.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 public enum PaymentTypeEnum {
     
     ALIPAY("支付宝"),
-    WECHAT("微信");
+    WXPAY("微信");
     
-    private String name;
+    private String desc;
     
-    PaymentTypeEnum(String name) {
-        this.name = name;
+    PaymentTypeEnum(String desc) {
+        this.desc = desc;
     }
     
     public static PaymentTypeEnum getByName(String name) {
         for (PaymentTypeEnum paymentTypeEnum : PaymentTypeEnum.values()) {
-            if (paymentTypeEnum.getName().equals(name)) {
+            if (paymentTypeEnum.name().equals(name)) {
                 return paymentTypeEnum;
             }
         }
-        return WECHAT;
+        return null;
+    }
+    
+    public static List<String> names() {
+        return Arrays.asList(ALIPAY.name(), WXPAY.name());
     }
 }

@@ -1,2 +1,4 @@
 .idea
 
+/payment/src/main/resources/apiclient_cert_back.p12
+/payment/src/main/resources/application.yml

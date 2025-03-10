@@ -22,6 +22,10 @@ public class PaymentController {
     
     @PostMapping("/pay")
     public Response<?> pay(@RequestBody Order order){
+    
+        // 校验订单参数
+        paymentFactory.checkOrder(order);
+        
         PaymentService paymentService = paymentFactory.getPaymentService(PaymentTypeEnum.getByName(order.getPaymentType()));
         return paymentService.pay(order);
     }
