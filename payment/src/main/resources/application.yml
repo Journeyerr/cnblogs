@@ -1,0 +1,20 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+pay:
+  wechat:
+    app-id: wxxxxx
+    mch-id: xxxx
+    mch-key: xxxxx
+    key-path: classpath:cert/apiclient_cert.p12
+    notify-url: http://xxxx/wx/notify/pay
+    refund-notify-url: http://xxxx/wx/notify/refund
+
+  alipay:
+    app-id: 2019091767145019
+    merchant-private-key: your-private-key
+    alipay-public-key: your-alipay-public-key
+    notify-url: https://your-domain.com/notify/alipay
+    gateway: https://openapi.alipay.com/gateway.do
+
