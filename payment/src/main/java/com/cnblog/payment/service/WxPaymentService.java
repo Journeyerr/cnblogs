@@ -3,7 +3,7 @@ package com.cnblog.payment.service;
 import com.cnblog.payment.config.WxPayProperties;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
-import com.cnblog.payment.enums.WxTradeTypeEnum;
+import com.cnblog.payment.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.bean.request.WxPayOrderQueryRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -36,11 +36,11 @@ public class WxPaymentService extends PaymentService{
                 .totalFee(order.getAmount().multiply(BigDecimal.valueOf(100)).intValue())
                 .body(order.getSubject())
                 .spbillCreateIp("127.0.0.1")
-                .tradeType(WxTradeTypeEnum.getByName(order.getTradeType()).getTradeType())
+                .tradeType(TradeTypeEnum.getByName(order.getTradeType()).getWxTradeType())
                 .notifyUrl(properties.getNotifyUrl())
                 .build();
             WxPayUnifiedOrderResult result = wxPayService.unifiedOrder(request);
-    
+            result.setXmlString("");
             return Response.success(result);
             
         }catch ( Exception e) {

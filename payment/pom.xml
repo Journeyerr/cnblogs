@@ -25,11 +25,20 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- 微信支付扩展 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <!-- 支付宝支付扩展 -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.39.99.ALL</version>
+        </dependency>
+
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
