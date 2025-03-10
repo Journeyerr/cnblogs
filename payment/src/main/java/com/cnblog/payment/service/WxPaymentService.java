@@ -44,7 +44,7 @@ public class WxPaymentService extends PaymentService{
             return Response.success(result);
             
         }catch ( Exception e) {
-            log.info("请求微信支付失败：{}", e);
+            e.printStackTrace();
             return Response.fail(e.getMessage());
         }
     }
@@ -58,6 +58,7 @@ public class WxPaymentService extends PaymentService{
             WxPayOrderQueryResult result = wxPayService.queryOrder(request);
             return Response.success(result);
         }catch ( Exception e){
+            e.printStackTrace();
             return Response.fail(e.getMessage());
         }
     }
@@ -76,6 +77,7 @@ public class WxPaymentService extends PaymentService{
             WxPayRefundResult refund = wxPayService.refund(wxPayRefundRequest);
             return Response.success(refund);
         } catch (WxPayException e) {
+            e.printStackTrace();
             return Response.fail(e.getMessage());
         }
     }
