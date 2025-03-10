@@ -6,14 +6,17 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.cnblog.payment.config.AlipayConfig;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +24,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class AliPaymentService extends PaymentService{
-    
-    private static final String FAST_INSTANT_TRADE_PAY = "FAST_INSTANT_TRADE_PAY";
     
     private static final String QR_PAY_MODE = "4";
     
@@ -75,45 +76,43 @@ public class AliPaymentService extends PaymentService{
                 return Response.fail("不支持的支付类型");
             }
         }catch (Exception e) {
-            e.printStackTrace();
-            return Response.fail(e.getMessage());
+            log.info("支付宝请求支付失败:{}", e.getMessage());
+            return Response.fail("支付宝请求支付失败");
         }
     }
     
     @Override
-    public Response<WxPayOrderQueryResult> query(String orderNo) {
-        return null;
+    public Response<AlipayTradeQueryResponse> query(String orderNo) {
+        AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("out_trade_no", orderNo);
+        request.setBizContent(bizContent.toJSONString());
+    
+        try {
+            AlipayTradeQueryResponse response = alipayClient.execute(request);
+            return Response.success(response);
+        } catch (Exception e) {
+            log.info("支付宝请求查询失败:{}", e.getMessage());
+            return Response.fail("支付宝请求查询失败");
+        }
     }
     
     @Override
     public Response refund(Order order) {
-        return null;
-    }
-    
-    private AlipayTradePagePayResponse aliPageOrder(Order order) throws AlipayApiException{
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("out_trade_no", order.getOrderNo());
+        bizContent.put("refund_amount", order.getAmount());
         
-        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-        alipayRequest.setReturnUrl(alipayConfig.getReturnUrl());
-        alipayRequest.setNotifyUrl(alipayConfig.getNotifyUrl());
+        request.setReturnUrl(alipayConfig.getReturnUrl());
+        request.setBizContent(bizContent.toJSONString());
     
-        AlipayTradePagePayModel pagePayModel = new AlipayTradePagePayModel();
-        pagePayModel.setOutTradeNo(order.getOrderNo());
-        pagePayModel.setSubject(order.getSubject());
-        pagePayModel.setTotalAmount(order.getAmount().toString());
-        
-        //销售产品码，与支付宝签约的产品码名称。注：目前电脑支付场景下仅支持FAST_INSTANT_TRADE_PAY
-        pagePayModel.setProductCode(FAST_INSTANT_TRADE_PAY);
-        //PC扫码支付的方式:订单码-可定义宽度的嵌入式二维码
-        pagePayModel.setQrPayMode(QR_PAY_MODE);
-        // 订单超时时间
-        pagePayModel.setTimeoutExpress(TIMEOUT_EXPRESS);
-    
-        // 商户自定义二维码宽度
-//        pagePayModel.setQrcodeWidth(PayConstant.AliPayConstants.ALIPAY_PC_QR_WIDTH);
-    
-        alipayRequest.setBizModel(pagePayModel);
-    
-        return alipayClient.execute(alipayRequest);
+        try {
+            AlipayTradeRefundResponse response = alipayClient.execute(request);
+            return Response.success(response);
+        } catch (Exception e) {
+            log.info("支付宝请求退款失败:{}", e.getMessage());
+            return Response.fail("支付宝请求退款失败");
+        }
     }
-    
 }
