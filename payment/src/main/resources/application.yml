@@ -12,9 +12,10 @@ pay:
     refund-notify-url: http://xxxx/wx/notify/refund
 
   alipay:
-    app-id: 2019091767145019
-    merchant-private-key: your-private-key
-    alipay-public-key: your-alipay-public-key
-    notify-url: https://your-domain.com/notify/alipay
-    gateway: https://openapi.alipay.com/gateway.do
+    app-id: 2021000123456789
+    private-key:
+    public-key:
+    server-url: https://openapi.alipay.com/gateway.do
+    notify-url: https://your-domain.com/alipay/notify
+    return-url: https://your-domain.com/alipay/return
 
