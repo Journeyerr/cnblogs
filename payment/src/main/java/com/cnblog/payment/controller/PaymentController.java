@@ -1,12 +1,22 @@
 package com.cnblog.payment.controller;
 
+import com.alipay.api.internal.util.AlipaySignature;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.enums.PaymentTypeEnum;
 import com.cnblog.payment.factory.PaymentFactory;
+import com.cnblog.payment.service.AliPaymentService;
 import com.cnblog.payment.service.PaymentService;
+import com.cnblog.payment.service.WxPaymentService;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 支付控制器
@@ -19,6 +29,10 @@ public class PaymentController {
     
     @Autowired
     private PaymentFactory paymentFactory;
+    @Autowired
+    private WxPaymentService wxPaymentService;
+    @Autowired
+    private AliPaymentService aliPaymentService;
     
     @PostMapping("/pay")
     public Response<?> pay(@RequestBody Order order){
@@ -40,5 +54,25 @@ public class PaymentController {
     public Response<?> refund(@RequestBody Order order) {
         PaymentService paymentService = paymentFactory.getPaymentService(PaymentTypeEnum.getByName(order.getPaymentType()));
         return paymentService.refund(order);
+    }
+    
+    @PostMapping
+    public String wxHandleNotify(@RequestBody String xmlResult) {
+        try {
+            wxPaymentService.wxHandleNotify(xmlResult);
+            return WxPayNotifyResponse.success("回调处理成功");
+        } catch (WxPayException e) {
+            return WxPayNotifyResponse.failResp("回调处理失败");
+        }
+    }
+    
+    @PostMapping
+    public String aliHandleNotify(HttpServletRequest request) {
+        try {
+            aliPaymentService.aliHandleNotify(request);
+            return "success";
+        } catch (Exception e) {
+            return "failure";
+        }
     }
 }

@@ -18,6 +18,13 @@ public class Response<T> {
         response.setData(data);
         return response;
     }
+    
+    public static <T> Response<T> success() {
+        Response<T> response = new Response<>();
+        response.setCode("0000");
+        response.setMessage("成功");
+        return response;
+    }
 
     public static <T> Response<T> fail(String message) {
         Response<T> response = new Response<>();

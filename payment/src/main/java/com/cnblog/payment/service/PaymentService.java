@@ -4,6 +4,8 @@ import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 支付服务
  * @author AnYuan
@@ -32,4 +34,10 @@ public abstract class PaymentService {
      * @return 结果
      */
     public abstract Response<?> refund(Order order);
+    
+    /**
+     * 回调处理
+     * @param httpServletRequest
+     */
+//    public abstract Response<?> handleNotify(HttpServletRequest httpServletRequest);
 }

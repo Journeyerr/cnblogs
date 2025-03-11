@@ -5,6 +5,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.AlipayTradePagePayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
@@ -20,6 +21,11 @@ import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -113,6 +119,37 @@ public class AliPaymentService extends PaymentService{
         } catch (Exception e) {
             log.info("支付宝请求退款失败:{}", e.getMessage());
             return Response.fail("支付宝请求退款失败");
+        }
+    }
+    
+    public void aliHandleNotify(HttpServletRequest httpServletRequest) throws Exception {
+        Map<String, String> params = new HashMap<>();
+        Enumeration<String> paramNames = httpServletRequest.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String paramName = paramNames.nextElement();
+            String paramValue = httpServletRequest.getParameter(paramName);
+            params.put(paramName, paramValue);
+        }
+    
+        try {
+            boolean signVerified = AlipaySignature.rsaCheckV1(
+                params,
+                alipayConfig.getPublicKey(),
+                alipayConfig.getCharset(),
+                alipayConfig.getSignType()
+            );
+    
+            if (!signVerified) {
+                log.info("支付宝回调通知签名验证失败: {}", params);
+                throw new Exception("签名验证失败");
+            }
+            
+            // 处理订单状态
+            
+            
+        } catch (Exception e) {
+            log.info("支付宝回调通知失败:{}", e.getMessage());
+            throw new Exception("支付宝回调通知处理失败");
         }
     }
 }

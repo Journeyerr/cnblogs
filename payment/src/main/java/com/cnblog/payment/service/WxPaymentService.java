@@ -4,6 +4,7 @@ import com.cnblog.payment.config.WxPayProperties;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.enums.TradeTypeEnum;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayOrderQueryRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
 @Service
@@ -80,5 +82,18 @@ public class WxPaymentService extends PaymentService{
             log.info("微信请求退款失败:{}", e.getMessage());
             return Response.fail("微信请求退款失败");
         }
+    }
+    
+    @Override
+    public Response<?> handleNotify(HttpServletRequest httpServletRequest) {
+        return null;
+    }
+    
+    public void wxHandleNotify(String xmlResult) throws WxPayException{
+        // 转换xml格式数据为对象，并验证签名
+        WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlResult);
+        
+        // 处理订单状态
+        
     }
 }
