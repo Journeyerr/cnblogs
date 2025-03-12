@@ -84,16 +84,11 @@ public class WxPaymentService extends PaymentService{
         }
     }
     
-    @Override
-    public Response<?> handleNotify(HttpServletRequest httpServletRequest) {
-        return null;
-    }
     
     public void wxHandleNotify(String xmlResult) throws WxPayException{
         // 转换xml格式数据为对象，并验证签名
         WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlResult);
         
         // 处理订单状态
-        
     }
 }
