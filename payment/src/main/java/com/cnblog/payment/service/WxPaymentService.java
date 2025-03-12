@@ -15,9 +15,9 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
@@ -25,9 +25,9 @@ import java.math.BigDecimal;
 @Slf4j
 public class WxPaymentService extends PaymentService{
     
-    @Autowired
+    @Resource
     private WxPayService wxPayService;
-    @Autowired
+    @Resource
     private WxPayProperties properties;
     
     @Override

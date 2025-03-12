@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "pay.alipay")
-public class AlipayConfig {
+public class AliPayConfig {
     
     private String appId;
     private String privateKey;

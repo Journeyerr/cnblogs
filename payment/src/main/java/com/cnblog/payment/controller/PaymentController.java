@@ -1,6 +1,5 @@
 package com.cnblog.payment.controller;
 
-import com.alipay.api.internal.util.AlipaySignature;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.enums.PaymentTypeEnum;
@@ -9,14 +8,11 @@ import com.cnblog.payment.service.AliPaymentService;
 import com.cnblog.payment.service.PaymentService;
 import com.cnblog.payment.service.WxPaymentService;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
-import com.github.binarywang.wxpay.exception.WxPayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 支付控制器
@@ -56,7 +52,7 @@ public class PaymentController {
         return paymentService.refund(order);
     }
     
-    @PostMapping
+    @PostMapping("/notify/wx")
     public String wxHandleNotify(HttpServletRequest request) {
         try {
             wxPaymentService.handleNotify(request);
@@ -66,7 +62,7 @@ public class PaymentController {
         }
     }
     
-    @PostMapping
+    @PostMapping("/notify/ali")
     public String aliHandleNotify(HttpServletRequest request) {
         try {
             aliPaymentService.handleNotify(request);

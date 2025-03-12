@@ -1,7 +1,6 @@
 package com.cnblog.payment.service;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.AlipayTradePagePayModel;
@@ -9,15 +8,13 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.cnblog.payment.config.AlipayConfig;
+import com.cnblog.payment.config.AliPayConfig;
+import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.enums.TradeTypeEnum;
-import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +28,10 @@ import java.util.Map;
 @Slf4j
 public class AliPaymentService extends PaymentService{
     
-    private static final String QR_PAY_MODE = "4";
-    
-    private static final String TIMEOUT_EXPRESS = "5m";
-    
     @Autowired
     private AlipayClient alipayClient;
-    
     @Autowired
-    private AlipayConfig alipayConfig;
+    private AliPayConfig alipayConfig;
     
     @Override
     public Response<AlipayResponse> pay(Order order) {
@@ -56,11 +48,11 @@ public class AliPaymentService extends PaymentService{
         //销售产品码，与支付宝签约的产品码名称。注：目前电脑支付场景下仅支持FAST_INSTANT_TRADE_PAY
         pagePayModel.setProductCode(TradeTypeEnum.getByName(order.getTradeType()).getAliTradeType());
         // 订单超时时间
-        pagePayModel.setTimeoutExpress(TIMEOUT_EXPRESS);
+        pagePayModel.setTimeoutExpress(PayConstant.ALI_TIMEOUT_EXPRESS);
     
         if (TradeTypeEnum.PC.name().equals(order.getTradeType())) {
             //PC扫码支付的方式:订单码-可定义宽度的嵌入式二维码
-            pagePayModel.setQrPayMode(QR_PAY_MODE);
+            pagePayModel.setQrPayMode(PayConstant.ALI_QR_PAY_MODE);
             // 商户自定义二维码宽度
 //        pagePayModel.setQrcodeWidth(PayConstant.AliPayConstants.ALIPAY_PC_QR_WIDTH);
         }
@@ -133,12 +125,7 @@ public class AliPaymentService extends PaymentService{
         }
     
         try {
-            boolean signVerified = AlipaySignature.rsaCheckV1(
-                params,
-                alipayConfig.getPublicKey(),
-                alipayConfig.getCharset(),
-                alipayConfig.getSignType()
-            );
+            boolean signVerified = AlipaySignature.rsaCheckV1( params, alipayConfig.getPublicKey(), alipayConfig.getCharset(), alipayConfig.getSignType());
         
             if (!signVerified) {
                 log.info("支付宝回调通知签名验证失败: {}", params);

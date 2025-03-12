@@ -2,13 +2,11 @@ package com.cnblog.payment.enums;
 
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Getter
 public enum PaymentTypeEnum {
     
     ALIPAY("支付宝"),
+    JD("京东"),
     WXPAY("微信");
     
     private String desc;
@@ -24,9 +22,5 @@ public enum PaymentTypeEnum {
             }
         }
         return null;
-    }
-    
-    public static List<String> names() {
-        return Arrays.asList(ALIPAY.name(), WXPAY.name());
     }
 }

@@ -19,3 +19,19 @@ pay:
     notify-url: https://your-domain.com/alipay/notify
     return-url: https://your-domain.com/alipay/return
 
+  jdpay:
+    mch-id:
+    des-key:
+    md5-key:
+    sha-key:
+    user-id:
+    pay-url: https://wepay.jd.com/degrade
+    notify-url:
+    return-url:
+    rsa-public-key:
+    rsa-private-key:
+
+
+
+
+
