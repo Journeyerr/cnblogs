@@ -39,5 +39,5 @@ public abstract class PaymentService {
      * 回调处理
      * @param httpServletRequest
      */
-//    public abstract Response<?> handleNotify(HttpServletRequest httpServletRequest);
+    public abstract void handleNotify(HttpServletRequest httpServletRequest) throws Exception;
 }

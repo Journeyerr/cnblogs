@@ -57,11 +57,11 @@ public class PaymentController {
     }
     
     @PostMapping
-    public String wxHandleNotify(@RequestBody String xmlResult) {
+    public String wxHandleNotify(HttpServletRequest request) {
         try {
-            wxPaymentService.wxHandleNotify(xmlResult);
+            wxPaymentService.handleNotify(request);
             return WxPayNotifyResponse.success("回调处理成功");
-        } catch (WxPayException e) {
+        } catch (Exception e) {
             return WxPayNotifyResponse.failResp("回调处理失败");
         }
     }
@@ -69,7 +69,7 @@ public class PaymentController {
     @PostMapping
     public String aliHandleNotify(HttpServletRequest request) {
         try {
-            aliPaymentService.aliHandleNotify(request);
+            aliPaymentService.handleNotify(request);
             return "success";
         } catch (Exception e) {
             return "failure";

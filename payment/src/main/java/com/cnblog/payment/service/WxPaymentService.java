@@ -14,6 +14,7 @@ import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,11 +85,13 @@ public class WxPaymentService extends PaymentService{
         }
     }
     
+    @Override
+    public void handleNotify(HttpServletRequest httpServletRequest) throws Exception {
+        String xmlResult = IOUtils.toString(httpServletRequest.getInputStream(), httpServletRequest.getCharacterEncoding());
     
-    public void wxHandleNotify(String xmlResult) throws WxPayException{
         // 转换xml格式数据为对象，并验证签名
         WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlResult);
-        
+    
         // 处理订单状态
     }
 }

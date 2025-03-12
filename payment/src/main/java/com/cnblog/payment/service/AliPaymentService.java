@@ -122,7 +122,8 @@ public class AliPaymentService extends PaymentService{
         }
     }
     
-    public void aliHandleNotify(HttpServletRequest httpServletRequest) throws Exception {
+    @Override
+    public void handleNotify(HttpServletRequest httpServletRequest) throws Exception {
         Map<String, String> params = new HashMap<>();
         Enumeration<String> paramNames = httpServletRequest.getParameterNames();
         while (paramNames.hasMoreElements()) {
@@ -138,15 +139,14 @@ public class AliPaymentService extends PaymentService{
                 alipayConfig.getCharset(),
                 alipayConfig.getSignType()
             );
-    
+        
             if (!signVerified) {
                 log.info("支付宝回调通知签名验证失败: {}", params);
                 throw new Exception("签名验证失败");
             }
-            
+        
             // 处理订单状态
-            
-            
+        
         } catch (Exception e) {
             log.info("支付宝回调通知失败:{}", e.getMessage());
             throw new Exception("支付宝回调通知处理失败");
