@@ -105,6 +105,7 @@ public class JdPaymentService extends PaymentService{
             "&key=" + jdPayConfig.getMd5key();
         String sign = JdPayKit.md5LowerCase(signStr);
     
+        // 拼接支付链接返回前端
         String payUrl = jdPayConfig.getPayUrl() +
             "?" +
             "merchant=" + URLEncoder.encode(jdPayConfig.getMchId(), "UTF-8") +
