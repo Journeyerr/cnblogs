@@ -4,14 +4,16 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.XmlUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.cnblog.payment.config.JdPayConfig;
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import com.cnblog.payment.vo.JdPayVO;
+import com.cnblog.payment.vo.JdQueryVO;
 import com.ijpay.jdpay.JdPayApi;
 import com.ijpay.jdpay.kit.JdPayKit;
+import com.ijpay.jdpay.model.JdBaseModel;
+import com.ijpay.jdpay.model.QueryOrderModel;
 import com.ijpay.jdpay.model.UniOrderModel;
 import com.ijpay.jdpay.util.RsaUtil;
 import com.ijpay.jdpay.util.ThreeDesUtil;
@@ -32,6 +34,32 @@ public class JdPaymentService extends PaymentService{
     @Autowired
     private JdPayConfig jdPayConfig;
     
+    private String modelConvertToXml(JdBaseModel jdBaseModel) {
+        return jdBaseModel.genReqXml(jdPayConfig.getRsaPrivateKey(),
+            jdPayConfig.getDesKey(),
+            PayConstant.JD_VERSION_2_0,
+            jdPayConfig.getMchId());
+    }
+    
+    private Map<String, Object> decryptAndConvertToMap(String response) throws Exception {
+        // 解析响应的 xml 数据
+        Map<String, String> map = JdPayKit.parseResp(response);
+        if (!PayConstant.JD_PAY_STATUS_SUCCESS.equals(map.get("code"))) {
+            throw new Exception("desc");
+        }
+    
+        // 解密结果
+        Base64.Decoder decoder = Base64.getDecoder();
+        String encryptData = new String(decoder.decode(map.get("encrypt")), "UTF-8");
+        String decryptedData = ThreeDesUtil.decrypt4HexStr(RsaUtil.decryptBASE64(jdPayConfig.getDesKey()), encryptData);
+    
+        // 将解密后的数据转换为Map
+        Map<String, Object> stringObjectMap = XmlUtil.xmlToMap(decryptedData);
+        log.info("京东请求解密结果：{}", JSONObject.toJSONString(stringObjectMap));
+        
+        return stringObjectMap;
+    }
+    
     @Override
     public Response<JdPayVO> pay(Order order) {
         
@@ -51,12 +79,11 @@ public class JdPaymentService extends PaymentService{
         log.info("京东原生支付请求参数：{}", JSONObject.toJSONString(orderModel));
     
         try {
-            String reqXml = orderModel.genReqXml(jdPayConfig.getRsaPrivateKey(), jdPayConfig.getDesKey(), PayConstant.JD_VERSION_2_0, jdPayConfig.getMchId());
-    
-            // 发送请求
+            String reqXml = modelConvertToXml(orderModel);
+            // 发送支付请求
             String response = JdPayApi.uniOrder(reqXml);
-            // 解析并响应结果
-            return Response.success(handleResponse(response));
+            // 解析并构建支付链接
+            return Response.success(handlePayResponse(response));
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,8 +92,27 @@ public class JdPaymentService extends PaymentService{
     }
     
     @Override
-    public Response<AlipayTradeQueryResponse> query(String orderNo) {
-        return null;
+    public Response<JdQueryVO> query(String orderNo) {
+        QueryOrderModel queryOrderModel = QueryOrderModel.builder()
+            .version(PayConstant.JD_VERSION_2_0)
+            .merchant(jdPayConfig.getMchId())
+            .tradeNum(orderNo)
+            .build();
+        String reqXml = modelConvertToXml(queryOrderModel);
+    
+        try {
+            // 发送支付请求
+            String response = JdPayApi.queryOrder(reqXml);
+            // 解析查询结果
+            Map<String, Object> queryOrderResult = decryptAndConvertToMap(response);
+            JdQueryVO JdQueryVO = JSON.parseObject(JSON.toJSONString(queryOrderResult), JdQueryVO.class);
+            
+            return Response.success(JdQueryVO);
+            
+        }catch ( Exception e) {
+            log.info("京东请求查询失败:{}", e.getMessage());
+            return Response.fail("京东请求查询失败");
+        }
     }
     
     @Override
@@ -80,25 +126,11 @@ public class JdPaymentService extends PaymentService{
     }
     
     
-    public JdPayVO handleResponse(String response) throws Exception {
+    public JdPayVO handlePayResponse(String response) throws Exception {
     
-        // 解析响应的 xml 数据
-        Map<String, String> map = JdPayKit.parseResp(response);
-        if (!PayConstant.JD_PAY_STATUS_SUCCESS.equals(map.get("code"))) {
-            throw new Exception("desc");
-        }
-    
-        // 解密结果
-        Base64.Decoder decoder = Base64.getDecoder();
-        String encryptData = new String(decoder.decode(map.get("encrypt")), "UTF-8");
-        String decryptedData = ThreeDesUtil.decrypt4HexStr(RsaUtil.decryptBASE64(jdPayConfig.getDesKey()), encryptData);
-        
-        // 将解密后的数据转换为Map
-        Map<String, Object> stringObjectMap = XmlUtil.xmlToMap(decryptedData);
+        Map<String, Object> stringObjectMap = decryptAndConvertToMap(response);
         JdPayVO jdPayVO = JSON.parseObject(JSON.toJSONString(stringObjectMap), JdPayVO.class);
-    
-        log.info("京东支付解密结果：{}", JSONObject.toJSONString(jdPayVO));
-
+        
         // 构建sign
         String signStr = "merchant=" + jdPayConfig.getMchId() +
             "&orderId=" + jdPayVO.getOrderId() +

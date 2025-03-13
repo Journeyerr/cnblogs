@@ -23,6 +23,9 @@ public class PaymentFactory {
     }
     
     public PaymentService getPaymentService(PaymentTypeEnum paymentTypeEnum) {
+        if (paymentTypeEnum == null) {
+            throw new IllegalArgumentException("不支持的支付类型");
+        }
         switch (paymentTypeEnum) {
             case WXPAY:
                 return wxPaymentService;
