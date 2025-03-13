@@ -70,7 +70,7 @@ public class WxPaymentService extends PaymentService{
     public Response refund(Order order) {
         WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
         wxPayRefundRequest.setOutTradeNo(order.getOrderNo());
-        wxPayRefundRequest.setOutRefundNo("R".concat(order.getOrderNo()));
+        wxPayRefundRequest.setOutRefundNo(buildRefundNo(order.getOrderNo()));
         wxPayRefundRequest.setRefundFee(order.getAmount().multiply(new BigDecimal(100)).intValue());
         wxPayRefundRequest.setTotalFee(order.getAmount().multiply(new BigDecimal(100)).intValue());
         wxPayRefundRequest.setRefundDesc("退款");

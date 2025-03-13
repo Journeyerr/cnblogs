@@ -1,5 +1,6 @@
 package com.cnblog.payment.service;
 
+import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.dto.response.Response;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public abstract class PaymentService {
+    
+    protected String buildRefundNo(String orderNo) {
+        return PayConstant.REFUND_NO_PREFIX.concat(orderNo);
+    }
     
     /**
      * 支付

@@ -14,6 +14,7 @@ import com.ijpay.jdpay.JdPayApi;
 import com.ijpay.jdpay.kit.JdPayKit;
 import com.ijpay.jdpay.model.JdBaseModel;
 import com.ijpay.jdpay.model.QueryOrderModel;
+import com.ijpay.jdpay.model.RefundModel;
 import com.ijpay.jdpay.model.UniOrderModel;
 import com.ijpay.jdpay.util.RsaUtil;
 import com.ijpay.jdpay.util.ThreeDesUtil;
@@ -44,8 +45,9 @@ public class JdPaymentService extends PaymentService{
     private Map<String, Object> decryptAndConvertToMap(String response) throws Exception {
         // 解析响应的 xml 数据
         Map<String, String> map = JdPayKit.parseResp(response);
+        log.info("京东请求加密结果：{}", JSONObject.toJSONString(map));
         if (!PayConstant.JD_PAY_STATUS_SUCCESS.equals(map.get("code"))) {
-            throw new Exception("desc");
+            throw new Exception(map.get("desc"));
         }
     
         // 解密结果
@@ -116,8 +118,35 @@ public class JdPaymentService extends PaymentService{
     }
     
     @Override
-    public Response refund(Order order) {
-        return null;
+    public Response<?> refund(Order order) {
+        
+        RefundModel refundModel = RefundModel.builder()
+            .version(PayConstant.JD_VERSION_2_0)
+            .merchant(jdPayConfig.getMchId())
+            .tradeNum(buildRefundNo(order.getOrderNo()))
+            .oTradeNum(order.getOrderNo())
+            .amount(order.getAmount().movePointRight(2).toString())
+            .currency(PayConstant.JD_CURRENCY_CNY)
+            .notifyUrl(jdPayConfig.getReturnUrl())
+            .build();
+    
+        try {
+            // 构建退款数据
+            String refundXml = modelConvertToXml(refundModel);
+            
+            // 发送退款请求
+            String refundResult = JdPayApi.refund(refundXml);
+            
+            // 解析退款结果
+            Map<String, Object> refundResultMap = decryptAndConvertToMap(refundResult);
+            
+            return Response.success(refundResultMap);
+            
+        }catch ( Exception e) {
+            e.printStackTrace();
+            log.info("京东请求退款失败:{}", e.getMessage());
+            return Response.fail("京东请求退款失败");
+        }
     }
     
     @Override

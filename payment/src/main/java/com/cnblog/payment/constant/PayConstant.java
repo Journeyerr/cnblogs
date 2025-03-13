@@ -8,15 +8,22 @@ package com.cnblog.payment.constant;
 public class PayConstant {
     
     /**
-     * 支付宝
+     * 退款单号前缀
+     */
+    public static final String REFUND_NO_PREFIX = "R";
+    
+    
+    /**
+     * 支付宝------------
      */
     public static final String ALI_QR_PAY_MODE = "4";
     public static final String ALI_TIMEOUT_EXPRESS = "5m";
     
     
     /**
-     * 京东
+     * 京东------------
      */
+    
     public static final String JD_VERSION_2_0 = "V2.0";
     public static final String JD_CURRENCY_CNY = "CNY";
     /**
