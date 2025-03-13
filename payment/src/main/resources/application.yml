@@ -3,6 +3,7 @@ server:
   port: 8080
 
 pay:
+  # 微信支付
   wechat:
     app-id: wxxxxx
     mch-id: xxxx
@@ -11,6 +12,7 @@ pay:
     notify-url: http://xxxx/wx/notify/pay
     refund-notify-url: http://xxxx/wx/notify/refund
 
+  # 支付宝支付
   alipay:
     app-id: 2021000123456789
     private-key:
@@ -19,6 +21,7 @@ pay:
     notify-url: https://your-domain.com/alipay/notify
     return-url: https://your-domain.com/alipay/return
 
+  # 京东支付
   jdpay:
     mch-id:
     des-key:
@@ -31,7 +34,13 @@ pay:
     rsa-public-key:
     rsa-private-key:
 
-
+  # 银联支付
+  ums:
+    mch-id:
+    tid:
+    msg-id:
+    notify-url:
+    return-url:
 
 
 
