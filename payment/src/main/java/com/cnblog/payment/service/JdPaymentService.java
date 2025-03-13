@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cnblog.payment.config.JdPayConfig;
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.vo.response.Response;
 import com.cnblog.payment.vo.JdPayVO;
 import com.cnblog.payment.vo.JdQueryVO;
 import com.ijpay.jdpay.JdPayApi;

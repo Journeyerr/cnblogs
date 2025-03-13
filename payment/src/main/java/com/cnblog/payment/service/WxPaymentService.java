@@ -2,7 +2,7 @@ package com.cnblog.payment.service;
 
 import com.cnblog.payment.config.WxPayProperties;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.vo.response.Response;
 import com.cnblog.payment.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayOrderQueryRequest;

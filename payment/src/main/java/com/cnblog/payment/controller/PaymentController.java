@@ -1,7 +1,7 @@
 package com.cnblog.payment.controller;
 
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.vo.response.Response;
 import com.cnblog.payment.enums.PaymentTypeEnum;
 import com.cnblog.payment.factory.PaymentFactory;
 import com.cnblog.payment.service.AliPaymentService;
@@ -11,7 +11,6 @@ import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**

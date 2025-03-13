@@ -13,7 +13,7 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.cnblog.payment.config.AliPayConfig;
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.vo.response.Response;
 import com.cnblog.payment.enums.TradeTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

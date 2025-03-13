@@ -2,7 +2,7 @@ package com.cnblog.payment.service;
 
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.response.Response;
+import com.cnblog.payment.vo.response.Response;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
