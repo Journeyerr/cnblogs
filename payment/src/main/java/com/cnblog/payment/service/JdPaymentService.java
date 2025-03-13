@@ -19,6 +19,7 @@ import com.ijpay.jdpay.model.UniOrderModel;
 import com.ijpay.jdpay.util.RsaUtil;
 import com.ijpay.jdpay.util.ThreeDesUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -151,7 +153,16 @@ public class JdPaymentService extends PaymentService{
     
     @Override
     public void handleNotify(HttpServletRequest httpServletRequest) throws Exception {
+        String xmlResult = IOUtils.toString(httpServletRequest.getInputStream(), httpServletRequest.getCharacterEncoding());
+        Map<String, Object> stringObjectMap = decryptAndConvertToMap(xmlResult);
     
+        // 支付商户号
+        Object tradeNum = stringObjectMap.get("tradeNum");
+        if (Objects.isNull(tradeNum)) {
+            throw new Exception("京东支付回调通知失败");
+        }
+        
+        // 处理订单状态
     }
     
     

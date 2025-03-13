@@ -131,7 +131,12 @@ public class AliPaymentService extends PaymentService{
                 log.info("支付宝回调通知签名验证失败: {}", params);
                 throw new Exception("签名验证失败");
             }
-        
+            
+            // 商户订单号
+            String orderNO = params.get("out_trade_no");
+            // 支付状态
+            String tradeStatus = params.get("trade_status");
+            
             // 处理订单状态
         
         } catch (Exception e) {

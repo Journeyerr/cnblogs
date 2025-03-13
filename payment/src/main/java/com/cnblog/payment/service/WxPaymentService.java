@@ -92,6 +92,9 @@ public class WxPaymentService extends PaymentService{
         // 转换xml格式数据为对象，并验证签名
         WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlResult);
     
+        // 商户订单号
+        String outTradeNo = notifyResult.getOutTradeNo();
+        
         // 处理订单状态
     }
 }
