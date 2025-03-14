@@ -7,7 +7,8 @@ public enum PaymentTypeEnum {
     
     ALIPAY("支付宝"),
     JD("京东"),
-    WXPAY("微信");
+    WXPAY("微信"),
+    UMS("银联聚合");
     
     private String desc;
     

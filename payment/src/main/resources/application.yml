@@ -34,13 +34,16 @@ pay:
     rsa-public-key:
     rsa-private-key:
 
-  # 银联支付
+  # 银联聚合支付
   ums:
     mch-id:
     tid:
     msg-id:
     notify-url:
     return-url:
+    sign-key:
+    pay-url: https://qr.chinaums.com/netpay-route-server/api/
+    msg-src:
 
 
 

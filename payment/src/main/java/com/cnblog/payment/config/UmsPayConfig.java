@@ -10,17 +10,21 @@ import org.springframework.context.annotation.Configuration;
 public class UmsPayConfig {
     
     /**
-     * 商户号
+     * 商户号 服务商分配字段
      */
     private String mchId;
     /**
-     * 终端号
+     * 系统来源 服务商分配字段
+     */
+    private String msgSrc;
+    /**
+     * 签名key 服务商分配字段
+     */
+    private String signKey;
+    /**
+     * 终端号 服务商分配字段
      */
     private String tid;
-    /**
-     * 合并单号前缀
-     */
-    private String msgId;
     /**
      * 支付回调地址
      */
@@ -29,5 +33,11 @@ public class UmsPayConfig {
      * 支付回调地址
      */
     private String returnUrl;
+    /**
+     * 支付接口
+     */
+    private String payUrl;
+    
+    
   
 }

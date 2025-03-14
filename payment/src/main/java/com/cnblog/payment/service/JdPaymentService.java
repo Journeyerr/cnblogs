@@ -74,7 +74,7 @@ public class JdPaymentService extends PaymentService{
             .currency(PayConstant.JD_CURRENCY_CNY)
             .notifyUrl(jdPayConfig.getNotifyUrl())
             .userId(jdPayConfig.getUserId())
-            .tradeName(PayConstant.JD_TRADE_NAME)
+            .tradeName(PayConstant.PRODUCT_NAME)
             .amount(order.getAmount().movePointRight(2).toString())
             .expireTime(PayConstant.JD_ORDER_VALID_TIME)
             .tradeTime(DateUtil.format(new Date(), "yyyyMMddHHmmss"))
