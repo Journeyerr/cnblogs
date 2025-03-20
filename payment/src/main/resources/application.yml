@@ -21,7 +21,7 @@ pay:
     notify-url: https://your-domain.com/alipay/notify
     return-url: https://your-domain.com/alipay/return
 
-  # 京东支付
+  # 京东原生支付
   jdpay:
     mch-id:
     des-key:

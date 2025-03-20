@@ -1,5 +1,6 @@
 package com.cnblog.payment.service;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.cnblog.payment.config.WxPayProperties;
 import com.cnblog.payment.dto.Order;
 import com.cnblog.payment.vo.response.Response;
@@ -42,7 +43,11 @@ public class WxPaymentService extends PaymentService{
                 .tradeType(TradeTypeEnum.getByName(order.getTradeType()).getWxTradeType())
                 .notifyUrl(properties.getNotifyUrl())
                 .build();
+    
+            log.info("微信支付请求参数：{}", JSONObject.toJSONString(request));
             WxPayUnifiedOrderResult result = wxPayService.unifiedOrder(request);
+            log.info("微信支付请求结果：{}", JSONObject.toJSONString(request));
+    
             result.setXmlString("");
             return Response.success(result);
             
@@ -58,6 +63,7 @@ public class WxPaymentService extends PaymentService{
         request.setOutTradeNo(orderNo);
     
         try {
+            log.info("微信查询请求参数：{}", JSONObject.toJSONString(request));
             WxPayOrderQueryResult result = wxPayService.queryOrder(request);
             return Response.success(result);
         }catch ( Exception e){
@@ -77,6 +83,7 @@ public class WxPaymentService extends PaymentService{
         wxPayRefundRequest.setNotifyUrl(properties.getRefundNotifyUrl());
     
         try {
+            log.info("微信查询请求参数：{}", JSONObject.toJSONString(wxPayRefundRequest));
             WxPayRefundResult refund = wxPayService.refund(wxPayRefundRequest);
             return Response.success(refund);
         } catch (WxPayException e) {

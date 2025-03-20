@@ -62,7 +62,11 @@ public class AliPaymentService extends PaymentService{
     
             AlipayResponse response;
             if (TradeTypeEnum.PC.name().equals(order.getTradeType())) {
+                
+                log.info("支付宝支付请求参数：{}", JSONObject.toJSONString(alipayRequest));
                 response = alipayClient.pageExecute(alipayRequest);
+                log.info("支付宝支付请求结果：{}", JSONObject.toJSONString(alipayRequest));
+                
                 return Response.success(response);
                 
             } else if (TradeTypeEnum.APP.name().equals(order.getTradeType())) {
@@ -87,6 +91,7 @@ public class AliPaymentService extends PaymentService{
         request.setBizContent(bizContent.toJSONString());
     
         try {
+            log.info("支付宝查询请求参数：{}", JSONObject.toJSONString(request));
             AlipayTradeQueryResponse response = alipayClient.execute(request);
             return Response.success(response);
         } catch (Exception e) {
@@ -106,6 +111,7 @@ public class AliPaymentService extends PaymentService{
         request.setBizContent(bizContent.toJSONString());
     
         try {
+            log.info("支付宝退款请求参数：{}", JSONObject.toJSONString(request));
             AlipayTradeRefundResponse response = alipayClient.execute(request);
             return Response.success(response);
         } catch (Exception e) {

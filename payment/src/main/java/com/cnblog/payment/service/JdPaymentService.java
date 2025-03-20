@@ -103,7 +103,7 @@ public class JdPaymentService extends PaymentService{
             .tradeNum(orderNo)
             .build();
         String reqXml = modelConvertToXml(queryOrderModel);
-    
+        log.info("京东原生查询请求参数：{}", queryOrderModel);
         try {
             // 发送支付请求
             String response = JdPayApi.queryOrder(reqXml);
@@ -135,7 +135,7 @@ public class JdPaymentService extends PaymentService{
         try {
             // 构建退款数据
             String refundXml = modelConvertToXml(refundModel);
-            
+            log.info("京东原生退款请求参数：{}", refundXml);
             // 发送退款请求
             String refundResult = JdPayApi.refund(refundXml);
             
