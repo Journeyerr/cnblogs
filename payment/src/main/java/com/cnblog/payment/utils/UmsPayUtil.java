@@ -11,6 +11,11 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * @author AnYuan
+ * @description UMS支付工具类
+ */
+
 @Slf4j
 public class UmsPayUtil {
     

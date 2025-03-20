@@ -6,6 +6,11 @@ import com.cnblog.payment.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author AnYuan
+ * @description 支付工厂
+ */
+
 @Service
 public class PaymentFactory {
     @Autowired

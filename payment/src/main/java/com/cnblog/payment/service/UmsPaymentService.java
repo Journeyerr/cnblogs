@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author AnYuan
+ * @description 银联商务聚合支付
+ */
+
 @Service
 @Slf4j
 public class UmsPaymentService extends PaymentService{

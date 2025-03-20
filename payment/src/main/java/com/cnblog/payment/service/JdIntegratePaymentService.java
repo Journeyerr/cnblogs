@@ -7,9 +7,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.cnblog.payment.config.JdPayConfig;
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.vo.response.Response;
 import com.cnblog.payment.vo.JdPayVO;
 import com.cnblog.payment.vo.JdQueryVO;
+import com.cnblog.payment.vo.response.Response;
 import com.ijpay.jdpay.JdPayApi;
 import com.ijpay.jdpay.kit.JdPayKit;
 import com.ijpay.jdpay.model.JdBaseModel;
@@ -32,12 +32,12 @@ import java.util.Objects;
 
 /**
  * @author AnYuan
- * @description 京东原生支付服务
+ * @description 京东集成支付服务
  */
 
 @Service
 @Slf4j
-public class JdPaymentService extends PaymentService{
+public class JdIntegratePaymentService extends PaymentService{
     
     @Autowired
     private JdPayConfig jdPayConfig;

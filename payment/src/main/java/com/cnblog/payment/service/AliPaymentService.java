@@ -24,6 +24,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author AnYuan
+ * @description 支付宝原生支付服务
+ */
+
 @Service
 @Slf4j
 public class AliPaymentService extends PaymentService{

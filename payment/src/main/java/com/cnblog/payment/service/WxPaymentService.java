@@ -22,6 +22,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
+/**
+ * @author AnYuan
+ * @description 微信原生支付服务
+ */
+
 @Service
 @Slf4j
 public class WxPaymentService extends PaymentService{
