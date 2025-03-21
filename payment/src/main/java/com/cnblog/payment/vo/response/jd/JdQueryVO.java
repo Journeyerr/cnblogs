@@ -1,4 +1,4 @@
-package com.cnblog.payment.vo;
+package com.cnblog.payment.vo.response.jd;
 
 import lombok.Data;
 
