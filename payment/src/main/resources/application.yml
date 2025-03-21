@@ -14,7 +14,7 @@ pay:
 
   # 支付宝支付
   alipay:
-    app-id: 2021000123456789
+    app-id: xxxxxxxxxxxxxxxx
     private-key:
     public-key:
     server-url: https://openapi.alipay.com/gateway.do
@@ -44,6 +44,16 @@ pay:
     sign-key:
     pay-url: https://qr.chinaums.com/netpay-route-server/api/
     msg-src:
+
+  # 招商聚合支付
+  cmb:
+    mch-id: xxxxxxxxxxxxxxx
+    app-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    notify-url: http://xxxxx/cmb/notify/pay
+    return-url: http://xxxxx/cmb/notify/refund
+    cmb-public-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    mch-private-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 

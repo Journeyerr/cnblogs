@@ -5,10 +5,11 @@ import lombok.Getter;
 @Getter
 public enum PaymentTypeEnum {
     
-    ALIPAY("支付宝"),
-    JD("京东"),
-    WXPAY("微信"),
-    UMS("银联聚合");
+    ALIPAY("支付宝支付"),
+    JD("京东原生支付"),
+    WXPAY("微信支付"),
+    UMS("银联聚合支付"),
+    CMB("招商聚合支付");
     
     private String desc;
     

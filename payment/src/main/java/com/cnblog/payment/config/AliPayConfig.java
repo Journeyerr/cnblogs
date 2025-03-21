@@ -2,6 +2,7 @@ package com.cnblog.payment.config;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.cnblog.payment.constant.PayConstant;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -36,12 +37,7 @@ public class AliPayConfig {
      * 支付成功后跳转地址
      */
     private String returnUrl;
-    /**
-     * 签名方式
-     */
-    private String signType = "RSA2";
-    private String charset = "UTF-8";
-    private String format = "json";
+
     
     @Bean
     public AlipayClient alipayClient() {
@@ -49,10 +45,10 @@ public class AliPayConfig {
             serverUrl,
             appId,
             privateKey,
-            format,
-            charset,
+            PayConstant.JSON,
+            PayConstant.UTF_8,
             publicKey,
-            signType
+            PayConstant.SIGN_TYPE_RSA2
         );
     }
 }

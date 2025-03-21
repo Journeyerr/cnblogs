@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.Date;
@@ -80,7 +81,7 @@ public class JdPaymentService extends PaymentService{
             .notifyUrl(jdPayConfig.getNotifyUrl())
             .userId(jdPayConfig.getUserId())
             .tradeName(PayConstant.PRODUCT_NAME)
-            .amount(order.getAmount().movePointRight(2).toString())
+            .amount(order.getAmount().multiply(BigDecimal.valueOf(100)).toString())
             .expireTime(PayConstant.JD_ORDER_VALID_TIME)
             .tradeTime(DateUtil.format(new Date(), "yyyyMMddHHmmss"))
             .build();

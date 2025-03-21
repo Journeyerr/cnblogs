@@ -1,6 +1,5 @@
 package com.cnblog.payment.dto.request.ums;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PayRequest {
+public class UmsPayReq {
     
     private String mid;
     private String tid;

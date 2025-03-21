@@ -31,5 +31,10 @@ public class Order {
      * 交易类型 PC APP
      */
     private String tradeType;
+    
+    /**
+     * 渠道支付交易流水号
+     */
+    private String tradeNo;
 
 }

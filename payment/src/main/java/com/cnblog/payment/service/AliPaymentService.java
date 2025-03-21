@@ -136,7 +136,7 @@ public class AliPaymentService extends PaymentService{
         }
     
         try {
-            boolean signVerified = AlipaySignature.rsaCheckV1( params, alipayConfig.getPublicKey(), alipayConfig.getCharset(), alipayConfig.getSignType());
+            boolean signVerified = AlipaySignature.rsaCheckV1( params, alipayConfig.getPublicKey(), PayConstant.UTF_8, PayConstant.SIGN_TYPE_RSA2);
         
             if (!signVerified) {
                 log.info("支付宝回调通知签名验证失败: {}", params);

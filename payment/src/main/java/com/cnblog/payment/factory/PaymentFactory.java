@@ -21,6 +21,8 @@ public class PaymentFactory {
     private JdPaymentService jdPaymentService;
     @Autowired
     private UmsPaymentService umsPaymentService;
+    @Autowired
+    private CmbPaymentService cmbPaymentService;
     
     public void checkOrder(Order order) {
         // 校验参数
@@ -39,6 +41,8 @@ public class PaymentFactory {
                 return jdPaymentService;
             case UMS:
                 return umsPaymentService;
+            case CMB:
+                return cmbPaymentService;
             default:
                 throw new IllegalArgumentException("不支持的支付类型");
         }

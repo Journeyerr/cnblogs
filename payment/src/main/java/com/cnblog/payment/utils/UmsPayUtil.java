@@ -1,6 +1,7 @@
 package com.cnblog.payment.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cnblog.payment.constant.PayConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,35 +22,11 @@ public class UmsPayUtil {
     
     public static String getSign(String signKey, String data) {
     
-        JSONObject json = JSONObject.parseObject(data);
-        List<String> keys = new ArrayList<>();
-        Map<String, String> map = new HashMap<>();
-        for (String key : json.keySet()) {
-            map.put(key, json.getString(key));
-    
-            if ("sign".equals(key) || StringUtils.isEmpty(map.get(key))) {
-                continue;
-            }
-            keys.add(key);
-        }
-        
-        Collections.sort(keys);
-        StringBuilder buf = new StringBuilder();
-        
-        for (int i = 0; i < keys.size(); i++) {
-            String key = keys.get(i);
-            String value = map.get(key);
-            if (i == keys.size() - 1) {
-                buf.append(key).append("=").append(value).append(signKey);
-            } else {
-                buf.append(key).append("=").append(value).append("&");
-            }
-        }
-        
         try {
-            return DigestUtils.sha256Hex(buf.toString().getBytes(StandardCharsets.UTF_8)).toUpperCase();
+            String signStr = MapUtil.sortAndJoinery(data);
+            return DigestUtils.sha256Hex(signStr.concat(signKey).getBytes(StandardCharsets.UTF_8)).toUpperCase();
         }catch (Exception e) {
-            throw new RuntimeException("签名失败");
+            throw new RuntimeException("银联支付签名失败");
         }
     }
     
@@ -72,12 +49,12 @@ public class UmsPayUtil {
             // 获取URLConnection对象对应的输出流
             out = new PrintWriter(conn.getOutputStream());
             // 发送请求参数
-            out.print(new String(param.getBytes(),"utf-8"));
+            out.print(new String(param.getBytes(), StandardCharsets.UTF_8));
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
             in = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(),"utf-8"));
+                new InputStreamReader(conn.getInputStream(),StandardCharsets.UTF_8));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;

@@ -4,13 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.cnblog.payment.config.UmsPayConfig;
 import com.cnblog.payment.constant.PayConstant;
 import com.cnblog.payment.dto.Order;
-import com.cnblog.payment.dto.request.ums.PayRequest;
+import com.cnblog.payment.dto.request.ums.UmsPayReq;
 import com.cnblog.payment.utils.UmsPayUtil;
 import com.cnblog.payment.vo.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,10 +34,10 @@ public class UmsPaymentService extends PaymentService{
         LocalDateTime expireTime = nowTime.plusMinutes(PayConstant.UMS_TIMEOUT_EXPRESS);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        PayRequest build = PayRequest.builder()
+        UmsPayReq build = UmsPayReq.builder()
             .mid(umsPayConfig.getMchId())
             .tid(umsPayConfig.getTid())
-            .totalAmount(order.getAmount().movePointRight(2).toString())
+            .totalAmount(order.getAmount().multiply(BigDecimal.valueOf(100)).toString())
             .reqTime(nowTime.format(formatter))
             .tranTime(nowTime.format(formatter))
             .expireTime(expireTime.format(formatter))
@@ -44,7 +45,7 @@ public class UmsPaymentService extends PaymentService{
             .returnUrl(umsPayConfig.getReturnUrl())
             .billNo(PayConstant.UMS_ORDER_PREFIX.concat(order.getOrderNo()))
             .orderDesc(order.getSubject())
-            .signType(PayConstant.UMS_SIGN_TYPE)
+            .signType(PayConstant.SIGN_TYPE_SHA256)
             .msgType(PayConstant.UMS_MSG_TYPE)
             .msgSrc(umsPayConfig.getMsgSrc())
             .requestTimestamp(nowTime.format(formatter))
