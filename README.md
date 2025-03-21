@@ -11,3 +11,5 @@
    
 - #### <span style="background:#f6f8fa;">qrcodeLogin : [Java SpringBoot实现简易扫码登录流程](https://www.cnblogs.com/anyuan/p/18738593)</span>
 
+- #### <span style="background:#f6f8fa;">qrcodeLogin : [Java SpringBoot 整合实现微信支付，支付宝支付，京东支付，招商聚合支付，银联聚合支付](https://www.cnblogs.com/anyuan/p/18757335)</span>
+
