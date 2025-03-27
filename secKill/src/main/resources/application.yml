@@ -1,0 +1,20 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirm-type: correlated # 开启发送确认
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动ACK（可选）
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/cnblog?characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+

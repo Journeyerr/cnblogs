@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnblog.seckill.repository.ProductMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cnblog.seckill.entity.Product">
+        <id column="id" property="id" />
+        <result column="sku_code" property="skuCode" />
+        <result column="stock" property="stock" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,  sku_code, stock, create_time
+    </sql>
+    <update id="decrementStock">
+        UPDATE `product` SET stock = stock - #{quantity} WHERE sku_code = #{sku} AND stock >= #{quantity}
+    </update>
+
+</mapper>
