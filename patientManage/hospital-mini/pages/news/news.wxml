@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="section-header">
+    <text class="section-title">健康教育资讯</text>
+  </view>
+  <view class="news-list">
+    <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="onNewsTap" data-id="{{item.id}}">
+      <image class="news-image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="news-content">
+        <text class="news-title">{{item.title}}</text>
+        <text class="news-subtitle">{{item.subtitle}}</text>
+        <view class="news-meta">
+          <text class="news-source">湖南省肿瘤医院</text>
+          <text class="news-reads">{{item.reads}} 阅读</text>
+          <text class="news-date">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="empty-state" wx:if="{{news.length === 0}}">
+    <text class="empty-icon">📰</text>
+    <text class="empty-text">暂无新闻资讯</text>
+  </view>
+</view>

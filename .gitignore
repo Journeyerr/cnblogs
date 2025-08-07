@@ -2,3 +2,6 @@
 
 /payment/src/main/resources/apiclient_cert_back.p12
 /payment/src/main/resources/application.yml
+
+patientManage/hospital-admin/.idea
+patientManage/hospital-admin/target

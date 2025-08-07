@@ -1,0 +1,261 @@
+/* 病人反馈页面样式 */
+.container {
+  padding: 20rpx;
+  background: #F5F5F5;
+}
+
+/* 反馈表单 */
+.feedback-form {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.form-title {
+  display: block;
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.form-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 200rpx;
+  border: 2rpx solid #E0E0E0;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: #333333;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.form-textarea:focus {
+  border-color: #4A90E2;
+}
+
+.form-counter {
+  display: block;
+  text-align: right;
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #E0E0E0;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #333333;
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #4A90E2;
+}
+
+/* 症状标签 */
+.symptom-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.symptom-tag {
+  padding: 12rpx 24rpx;
+  border: 2rpx solid #E0E0E0;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  color: #666666;
+  background: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+.symptom-tag.active {
+  border-color: #4A90E2;
+  background: #E3F2FD;
+  color: #4A90E2;
+}
+
+/* 紧急程度选择器 */
+.urgency-selector {
+  display: flex;
+  gap: 20rpx;
+}
+
+.urgency-option {
+  flex: 1;
+  height: 100rpx;
+  border: 2rpx solid #E0E0E0;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #FFFFFF;
+}
+
+.urgency-option.active {
+  border-color: #4A90E2;
+  background: #E3F2FD;
+}
+
+.urgency-icon {
+  font-size: 32rpx;
+  margin-bottom: 8rpx;
+}
+
+.urgency-text {
+  font-size: 26rpx;
+  color: #333333;
+}
+
+.urgency-option.active .urgency-text {
+  color: #4A90E2;
+  font-weight: bold;
+}
+
+/* 提交按钮 */
+.submit-section {
+  margin-bottom: 20rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #4A90E2;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.submit-btn:disabled {
+  background: #CCCCCC;
+  color: #999999;
+}
+
+/* 历史反馈 */
+.history-section {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.feedback-item {
+  border-bottom: 1rpx solid #F0F0F0;
+  padding-bottom: 20rpx;
+}
+
+.feedback-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.feedback-content {
+  margin-bottom: 16rpx;
+}
+
+.feedback-text {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 12rpx;
+}
+
+.feedback-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedback-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.feedback-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  background: #FFF3E0;
+  color: #FFA502;
+}
+
+.feedback-status.replied {
+  background: #E8F5E8;
+  color: #2ED573;
+}
+
+.feedback-reply {
+  background: #F8F9FA;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin-top: 12rpx;
+}
+
+.reply-label {
+  display: block;
+  font-size: 24rpx;
+  color: #4A90E2;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.reply-text {
+  display: block;
+  font-size: 26rpx;
+  color: #333333;
+  line-height: 1.5;
+} 

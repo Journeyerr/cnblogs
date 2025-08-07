@@ -1,0 +1,338 @@
+/* 病人详情页面样式 */
+.container {
+  padding: 20rpx;
+  background: #F5F5F5;
+}
+
+/* 病人头部信息 */
+.patient-header {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.patient-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #4A90E2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  color: #FFFFFF;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.patient-basic {
+  flex: 1;
+}
+
+.patient-name {
+  display: block;
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.patient-info {
+  display: block;
+  font-size: 28rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+}
+
+.patient-status {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  width: fit-content;
+}
+
+/* 快速操作 */
+.quick-actions {
+  display: flex;
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 10rpx;
+  border-radius: 8rpx;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:active {
+  background-color: #F5F5F5;
+}
+
+.action-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #333333;
+}
+
+/* 区块样式 */
+.section {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.section-more {
+  font-size: 28rpx;
+  color: #4A90E2;
+}
+
+/* 检查指标网格 */
+.check-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.check-item {
+  background: #F8F9FA;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  text-align: center;
+}
+
+.check-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+}
+
+.check-value {
+  display: block;
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: bold;
+}
+
+.check-value.warning {
+  color: #FF4757;
+}
+
+/* 信息列表 */
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: bold;
+}
+
+/* 记录列表 */
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 12rpx;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  font-size: 32rpx;
+}
+
+.record-content {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.record-title {
+  display: block;
+  font-size: 30rpx;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.record-time {
+  display: block;
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.record-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+/* 反馈列表 */
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.feedback-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.feedback-item:last-child {
+  border-bottom: none;
+}
+
+.feedback-content {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.feedback-text {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+
+.feedback-time {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.feedback-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: #4A90E2;
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background: #F5F5F5;
+  color: #666666;
+  border: 1rpx solid #DDDDDD;
+}
+
+/* 标签样式 */
+.tag-primary {
+  background: #E3F2FD;
+  color: #4A90E2;
+}
+
+.tag-success {
+  background: #E8F5E8;
+  color: #2ED573;
+}
+
+.tag-completed {
+  background: #E8F5E8;
+  color: #2ED573;
+}
+
+.tag-unread {
+  background: #FFF3E0;
+  color: #FFA502;
+}
+
+.tag-read {
+  background: #F5F5F5;
+  color: #999999;
+} 

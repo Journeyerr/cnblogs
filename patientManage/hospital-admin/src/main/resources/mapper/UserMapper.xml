@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.repository.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hospital.model.entity.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="real_name" property="realName" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="loadUserByUsernameMap" type="com.hospital.model.entity.CurrentUser">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="status" property="status" />
+        <collection property="roles" ofType="com.hospital.model.entity.Role" fetchType="lazy">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="roleCode" column="role_code"/>
+        </collection>
+        <collection property="permission" ofType="com.hospital.model.entity.Permission" fetchType="lazy">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="permissionCode" column="permission_code"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, password, real_name, email, phone, status, create_time, update_time, deleted
+    </sql>
+    <select id="loadUserByUsername" resultMap="loadUserByUsernameMap">
+        select u.*,r.role_code,sp.permission_code
+        from user u
+                 left join sys_user_role ur
+                           on u.id = ur.user_id and ur.deleted = 0 and ur.status = 1
+                 left join sys_role r
+                           on ur.role_id = r.id
+                 left join sys_role_permission srp on ur.role_id = srp.role_id
+
+                 left join sys_permission sp on srp.permission_id = sp.id
+        where username= #{userName}
+    </select>
+
+</mapper>

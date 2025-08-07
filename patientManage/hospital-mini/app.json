@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/patient-list/patient-list",
+    "pages/patient-detail/patient-detail",
+    "pages/todo/todo",
+    "pages/profile/profile",
+    "pages/login/login",
+    "pages/patient-feedback/patient-feedback",
+    "pages/news/news"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4A90E2",
+    "navigationBarTitleText": "全病程管理",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F5F5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4A90E2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "pages/images/home.png",
+        "selectedIconPath": "pages/images/home_active.png"
+      },
+      {
+        "pagePath": "pages/patient-list/patient-list",
+        "text": "管理",
+        "iconPath": "pages/images/index.png",
+        "selectedIconPath": "pages/images/index_active.png"
+      },
+      {
+        "pagePath": "pages/todo/todo",
+        "text": "待办",
+        "iconPath": "pages/images/order.png",
+        "selectedIconPath": "pages/images/order_active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "pages/images/admin.png",
+        "selectedIconPath": "pages/images/admin_active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

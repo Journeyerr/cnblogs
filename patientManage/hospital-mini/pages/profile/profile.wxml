@@ -1,0 +1,107 @@
+<view class="container">
+  <!-- 用户信息头部 -->
+  <view class="user-header">
+    <view class="user-avatar">
+      <text class="avatar-text">{{userInfo.name[0]}}</text>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.name}}</text>
+      <text class="user-role">{{userInfo.realName}}</text>
+      <text class="user-phone">{{userInfo.phone}}</text>
+    </view>
+    <view class="user-actions">
+      <view class="action-btn" bindtap="onEditProfile">
+        <text class="action-icon">✏️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-item">
+      <text class="stats-number">{{stats.diaryCount}}</text>
+      <text class="stats-label">日记</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.followCount}}</text>
+      <text class="stats-label">关注</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.fansCount}}</text>
+      <text class="stats-label">粉丝</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.points}}</text>
+      <text class="stats-label">积分</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onMenuTap" data-type="collections">
+        <view class="menu-icon">📁</view>
+        <text class="menu-text">我的收藏</text>
+        <text class="menu-arrow">></text>
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="trials">
+        <view class="menu-icon">🔬</view>
+        <text class="menu-text">临床试验申请</text>
+        <text class="menu-arrow">></text>
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="reports">
+        <view class="menu-icon">📋</view>
+        <text class="menu-text">诊疗报告</text>
+        <text class="menu-arrow">></text>
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="doctors">
+        <view class="menu-icon">👨‍⚕️</view>
+        <text class="menu-text">我的医生</text>
+        <text class="menu-arrow">></text>
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="consultations">
+        <view class="menu-icon">💬</view>
+        <text class="menu-text">我的会诊</text>
+        <text class="menu-arrow">></text>
+      </view>
+      <view class="menu-item" bindtap="onMenuTap" data-type="feedback">
+        <view class="menu-icon">💭</view>
+        <text class="menu-text">留言反馈</text>
+        <text class="menu-arrow">></text>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 设置选项 -->
+  <view class="settings-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onMenuTap" data-type="notifications">
+        <view class="menu-icon">🔔</view>
+        <text class="menu-text">消息通知</text>
+        <switch class="menu-switch" checked="{{settings.notifications}}" bindchange="onNotificationChange" />
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="privacy">
+        <view class="menu-icon">🔒</view>
+        <text class="menu-text">隐私设置</text>
+        <text class="menu-arrow">></text>
+      </view>
+      
+      <view class="menu-item" bindtap="onMenuTap" data-type="about">
+        <view class="menu-icon">ℹ️</view>
+        <text class="menu-text">关于我们</text>
+        <text class="menu-arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </view>
+</view> 

@@ -1,0 +1,137 @@
+<view class="container">
+  <!-- 病人基本信息 -->
+  <view class="patient-header">
+    <view class="patient-avatar">
+      <text class="avatar-text">{{patient.name[0]}}</text>
+    </view>
+    <view class="patient-basic">
+      <text class="patient-name">{{patient.name}}</text>
+      <text class="patient-info">{{patient.age}}岁 {{patient.gender}} | {{patient.room}}房{{patient.bed}}床</text>
+      <view class="patient-status tag-{{patient.status === '住院中' ? 'primary' : 'success'}}">
+        {{patient.status}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <view class="action-btn" bindtap="onQuickAction" data-action="check">
+      <text class="action-icon">📊</text>
+      <text class="action-text">检查记录</text>
+    </view>
+    <view class="action-btn" bindtap="onQuickAction" data-action="medicine">
+      <text class="action-icon">💊</text>
+      <text class="action-text">用药记录</text>
+    </view>
+    <view class="action-btn" bindtap="onQuickAction" data-action="care">
+      <text class="action-icon">🏥</text>
+      <text class="action-text">护理记录</text>
+    </view>
+    <view class="action-btn" bindtap="onQuickAction" data-action="feedback">
+      <text class="action-icon">💬</text>
+      <text class="action-text">病人反馈</text>
+    </view>
+  </view>
+
+  <!-- 最新检查指标 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最新检查指标</text>
+      <text class="section-more" bindtap="onViewAllChecks">查看全部</text>
+    </view>
+    <view class="check-grid">
+      <view class="check-item">
+        <text class="check-label">体温</text>
+        <text class="check-value {{patient.latestCheck.temperature > 37.5 ? 'warning' : ''}}">
+          {{patient.latestCheck.temperature}}°C
+        </text>
+      </view>
+      <view class="check-item">
+        <text class="check-label">血压</text>
+        <text class="check-value">{{patient.latestCheck.bloodPressure}}</text>
+      </view>
+      <view class="check-item">
+        <text class="check-label">心率</text>
+        <text class="check-value">{{patient.latestCheck.heartRate}}次/分</text>
+      </view>
+      <view class="check-item">
+        <text class="check-label">血糖</text>
+        <text class="check-value {{patient.latestCheck.bloodSugar > 6.1 ? 'warning' : ''}}">
+          {{patient.latestCheck.bloodSugar}}mmol/L
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 住院信息 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">住院信息</text>
+    </view>
+    <view class="info-list">
+      <view class="info-item">
+        <text class="info-label">入院日期</text>
+        <text class="info-value">{{patient.admissionDate}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">住院天数</text>
+        <text class="info-value">{{patient.hospitalDays}}天</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">诊断</text>
+        <text class="info-value">{{patient.diagnosis}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">主治医生</text>
+        <text class="info-value">张医生</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近记录 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最近记录</text>
+      <text class="section-more" bindtap="onViewAllRecords">查看全部</text>
+    </view>
+    <view class="record-list">
+      <view class="record-item" wx:for="{{recentRecords}}" wx:key="id">
+        <view class="record-icon">
+          <text class="icon-text">{{item.icon}}</text>
+        </view>
+        <view class="record-content">
+          <text class="record-title">{{item.title}}</text>
+          <text class="record-time">{{item.time}}</text>
+        </view>
+        <view class="record-status tag-{{item.status}}">
+          {{item.statusText}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 病人反馈 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">病人反馈</text>
+      <text class="section-more" bindtap="onViewAllFeedbacks">查看全部</text>
+    </view>
+    <view class="feedback-list">
+      <view class="feedback-item" wx:for="{{recentFeedbacks}}" wx:key="id">
+        <view class="feedback-content">
+          <text class="feedback-text">{{item.content}}</text>
+          <text class="feedback-time">{{item.time}}</text>
+        </view>
+        <view class="feedback-status tag-{{item.status}}">
+          {{item.statusText}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn-secondary" bindtap="onDischarge">办理出院</button>
+    <button class="btn-primary" bindtap="onAddRecord">添加记录</button>
+  </view>
+</view> 

@@ -1,0 +1,93 @@
+<view class="container">
+  <!-- 反馈表单 -->
+  <view class="feedback-form">
+    <view class="form-header">
+      <text class="form-title">身体反馈</text>
+      <text class="form-subtitle">请详细描述您当前的身体状况</text>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">身体状况</text>
+      <textarea class="form-textarea" placeholder="请描述您当前的身体状况，包括症状、感受等..." bindinput="onContentInput" value="{{content}}" maxlength="500"></textarea>
+      <text class="form-counter">{{content.length}}/500</text>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">症状类型</text>
+      <view class="symptom-tags">
+        <view class="symptom-tag {{selectedSymptoms.includes('pain') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="pain">
+          疼痛
+        </view>
+        <view class="symptom-tag {{selectedSymptoms.includes('fever') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="fever">
+          发热
+        </view>
+        <view class="symptom-tag {{selectedSymptoms.includes('nausea') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="nausea">
+          恶心
+        </view>
+        <view class="symptom-tag {{selectedSymptoms.includes('fatigue') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="fatigue">
+          疲劳
+        </view>
+        <view class="symptom-tag {{selectedSymptoms.includes('sleep') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="sleep">
+          睡眠
+        </view>
+        <view class="symptom-tag {{selectedSymptoms.includes('appetite') ? 'active' : ''}}" bindtap="onSymptomSelect" data-symptom="appetite">
+          食欲
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">紧急程度</text>
+      <view class="urgency-selector">
+        <view class="urgency-option {{urgency === 'low' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="low">
+          <text class="urgency-icon">🟢</text>
+          <text class="urgency-text">轻微</text>
+        </view>
+        <view class="urgency-option {{urgency === 'medium' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="medium">
+          <text class="urgency-icon">🟡</text>
+          <text class="urgency-text">一般</text>
+        </view>
+        <view class="urgency-option {{urgency === 'high' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="high">
+          <text class="urgency-icon">🔴</text>
+          <text class="urgency-text">紧急</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">联系方式</text>
+      <input class="form-input" placeholder="请输入您的联系电话" bindinput="onPhoneInput" value="{{phone}}" />
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section">
+    <button class="submit-btn" bindtap="onSubmit" disabled="{{!canSubmit}}">
+      提交反馈
+    </button>
+  </view>
+
+  <!-- 历史反馈 -->
+  <view class="history-section">
+    <view class="section-header">
+      <text class="section-title">历史反馈</text>
+    </view>
+    <view class="feedback-list">
+      <view class="feedback-item" wx:for="{{feedbackHistory}}" wx:key="id">
+        <view class="feedback-content">
+          <text class="feedback-text">{{item.content}}</text>
+          <view class="feedback-meta">
+            <text class="feedback-time">{{item.time}}</text>
+            <text class="feedback-status {{item.status === 'replied' ? 'replied' : ''}}">
+              {{item.status === 'replied' ? '已回复' : '待回复'}}
+            </text>
+          </view>
+        </view>
+        <view class="feedback-reply" wx:if="{{item.reply}}">
+          <text class="reply-label">护士回复:</text>
+          <text class="reply-text">{{item.reply}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

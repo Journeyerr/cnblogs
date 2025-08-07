@@ -1,0 +1,106 @@
+<view class="container">
+  <!-- 搜索框 -->
+  <view class="search-box">
+    <text class="iconfont icon-search"></text>
+    <input class="search-input" placeholder="搜索病人 | 检查 | 用药 | 记录" bindinput="onSearchInput" />
+  </view>
+
+  <!-- 快捷功能 -->
+  <view class="quick-actions">
+    <view class="action-item" bindtap="onQuickAction" data-type="patient">
+      <view class="action-icon bg-blue">
+        <text class="iconfont icon-user"></text>
+      </view>
+      <view class="action-text">
+        <text class="action-title">我的病人</text>
+        <text class="action-desc">管理病人信息</text>
+      </view>
+    </view>
+    
+    <view class="action-item" bindtap="onQuickAction" data-type="check">
+      <view class="action-icon bg-green">
+        <text class="iconfont icon-check"></text>
+      </view>
+      <view class="action-text">
+        <text class="action-title">检查管理</text>
+        <text class="action-desc">智能提醒</text>
+      </view>
+    </view>
+    
+    <view class="action-item" bindtap="onQuickAction" data-type="medicine">
+      <view class="action-icon bg-orange">
+        <text class="iconfont icon-medicine"></text>
+      </view>
+      <view class="action-text">
+        <text class="action-title">用药管理</text>
+        <text class="action-desc">定时提醒</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stats-item">
+      <text class="stats-number">{{stats.totalPatients}}</text>
+      <text class="stats-label">在院病人</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.todayChecks}}</text>
+      <text class="stats-label">今日检查</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.pendingTodos}}</text>
+      <text class="stats-label">待办事项</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{stats.newFeedbacks}}</text>
+      <text class="stats-label">新反馈</text>
+    </view>
+  </view>
+
+  <!-- 今日待办 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">今日待办</text>
+      <text class="section-more" bindtap="navigateToTodo">查看更多</text>
+    </view>
+    <view class="todo-list">
+      <view class="todo-item" wx:for="{{todayTodos}}" wx:key="id" bindtap="onTodoTap" data-id="{{item.id}}">
+        <view class="todo-content">
+          <text class="todo-title">{{item.title}}</text>
+          <text class="todo-patient">{{item.patientName}}</text>
+        </view>
+        <view class="todo-time">
+          <text class="time-text">{{item.dueTime}}</text>
+          <view class="priority-tag tag-{{item.priority}}">{{item.priorityText}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最新资讯 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">健康教育</text>
+      <text class="section-more" bindtap="navigateToNews">推荐</text>
+    </view>
+    <view class="news-list">
+      <view class="news-item" wx:for="{{news}}" wx:key="id" bindtap="onNewsTap" data-id="{{item.id}}">
+        <image class="news-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="news-content">
+          <text class="news-title">{{item.title}}</text>
+          <text class="news-subtitle">{{item.subtitle}}</text>
+          <view class="news-meta">
+            <text class="news-source">湖南省肿瘤医院</text>
+            <text class="news-reads">{{item.reads}} 阅读</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 浮动按钮 -->
+  <view class="fab" bindtap="onAddRecord">
+    <text class="iconfont icon-plus"></text>
+  </view>
+</view> 

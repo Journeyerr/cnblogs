@@ -1,0 +1,235 @@
+/* 病人列表页面样式 */
+.container {
+  padding: 20rpx;
+  background: #F5F5F5;
+}
+
+/* 搜索和筛选区域 */
+.search-section {
+  margin-bottom: 20rpx;
+}
+
+.search-box {
+  background: #FFFFFF;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  margin-left: 16rpx;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.filter-tabs {
+  display: flex;
+  background: #FFFFFF;
+  border-radius: 8rpx;
+  padding: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.filter-tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 8rpx;
+  font-size: 28rpx;
+  color: #666666;
+  border-radius: 6rpx;
+  transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+  background: #4A90E2;
+  color: #FFFFFF;
+}
+
+/* 病人列表 */
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.patient-item {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.patient-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #4A90E2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.patient-info {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.patient-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.patient-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.patient-details {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 8rpx;
+}
+
+.detail-item {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.patient-diagnosis {
+  margin-bottom: 8rpx;
+}
+
+.diagnosis-text {
+  font-size: 28rpx;
+  color: #333333;
+  background: #F5F5F5;
+  padding: 8rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+.patient-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admission-date,
+.hospital-days {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.patient-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  align-items: center;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx;
+  border-radius: 8rpx;
+  background: #F5F5F5;
+  min-width: 80rpx;
+}
+
+.action-text {
+  font-size: 22rpx;
+  color: #666666;
+  margin-top: 4rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80rpx 40rpx;
+  color: #999999;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: 28rpx;
+}
+
+/* 浮动按钮 */
+.fab {
+  position: fixed;
+  bottom: 120rpx;
+  right: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: #4A90E2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 48rpx;
+  box-shadow: 0 4rpx 12rpx rgba(74, 144, 226, 0.3);
+  z-index: 1000;
+}
+
+/* 图标字体 */
+.iconfont {
+  font-family: "iconfont";
+  font-size: 45rpx;
+  color: white;
+}
+
+.icon-search::before {
+  content: "🔍";
+}
+
+.icon-check::before {
+  content: "✓";
+}
+
+.icon-arrow::before {
+  content: ">";
+}
+
+.icon-plus::before {
+  content: "+";
+}
+
+/* 标签样式 */
+.tag-primary {
+  background: #E3F2FD;
+  color: #4A90E2;
+}
+
+.tag-success {
+  background: #E8F5E8;
+  color: #2ED573;
+} 

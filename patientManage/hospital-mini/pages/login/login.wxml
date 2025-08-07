@@ -1,0 +1,86 @@
+<view class="login-container">
+  <!-- Logo和标题 -->
+  <view class="logo-section">
+    <view class="logo">
+      <text class="logo-icon">🏥</text>
+    </view>
+    <text class="app-title">全病程管理</text>
+    <text class="app-subtitle">智能护理管理系统</text>
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="login-form">
+    <view class="form-item">
+      <text class="form-label">手机号码/用户名</text>
+      <input class="form-input" type="number" placeholder="请输入手机号码" bindinput="onPhoneInput" value="admin" />
+    </view>
+    
+    <view class="form-item" wx:if="{{loginType === 'password'}}">
+      <text class="form-label">密码</text>
+      <input class="form-input" type="password" placeholder="请输入密码" bindinput="onPasswordInput" value="123456" />
+    </view>
+    
+    <view class="form-item" wx:if="{{loginType === 'code'}}">
+      <text class="form-label">验证码</text>
+      <view class="code-input-group">
+        <input class="form-input code-input" type="number" placeholder="请输入验证码" bindinput="onCodeInput" value="{{code}}" />
+        <button class="code-btn {{codeSent ? 'sent' : ''}}" bindtap="onSendCode" disabled="{{codeSent}}">
+          {{codeSent ? countdown + 's' : '获取验证码'}}
+        </button>
+      </view>
+    </view>
+
+    <!-- 登录类型切换 -->
+    <view class="login-type-switch">
+      <text class="switch-text {{loginType === 'password' ? 'active' : ''}}" bindtap="onSwitchLoginType" data-type="password">
+        密码登录
+      </text>
+      <text class="switch-divider">|</text>
+      <text class="switch-text {{loginType === 'code' ? 'active' : ''}}" bindtap="onSwitchLoginType" data-type="code">
+        验证码登录
+      </text>
+    </view>
+
+    <!-- 登录按钮 -->
+    <button class="login-btn" bindtap="onLogin" disabled="{{!canLogin}}">
+      登录
+    </button>
+
+    <!-- 角色选择 -->
+    <view class="role-selector">
+      <text class="role-label">登录身份:</text>
+      <view class="role-options">
+        <view class="role-option {{userRole === 'nurse' ? 'active' : ''}}" bindtap="onSelectRole" data-role="nurse">
+          <text class="role-icon">👩‍⚕️</text>
+          <text class="role-text">护士</text>
+        </view>
+        <view class="role-option {{userRole === 'patient' ? 'active' : ''}}" bindtap="onSelectRole" data-role="patient">
+          <text class="role-icon">👤</text>
+          <text class="role-text">病人</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 协议同意 -->
+  <view class="agreement">
+    <view class="agreement-checkbox" bindtap="onToggleAgreement">
+      <text class="checkbox-icon {{agreed ? 'checked' : ''}}">
+        {{agreed ? '✓' : ''}}
+      </text>
+    </view>
+    <text class="agreement-text"> 我已阅读并同意 <text class="agreement-link" bindtap="onViewAgreement">《用户协议》</text> 和  <text class="agreement-link" bindtap="onViewPrivacy">《隐私政策》</text>
+    </text>
+  </view>
+
+  <!-- 其他登录方式 -->
+  <!-- <view class="other-login">
+    <text class="other-login-text">其他登录方式</text>
+    <view class="other-login-buttons">
+      <button class="other-btn wechat" bindtap="onWechatLogin">
+        <text class="other-btn-icon">💬</text>
+        <text class="other-btn-text">微信登录</text>
+      </button>
+    </view>
+  </view> -->
+</view> 

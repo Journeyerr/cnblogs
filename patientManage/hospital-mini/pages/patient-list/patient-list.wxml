@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 搜索和筛选 -->
+  <view class="search-section">
+    <view class="search-box">
+      <text class="iconfont icon-search"></text>
+      <input class="search-input" placeholder="搜索病人姓名、房间号" bindinput="onSearchInput" />
+    </view>
+    
+    <view class="filter-tabs">
+      <view class="filter-tab {{currentFilter === 'all' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="all">
+        全部 ({{patients.length}})
+      </view>
+      <view class="filter-tab {{currentFilter === 'hospitalized' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="hospitalized">
+        在院 ({{hospitalizedCount}})
+      </view>
+      <view class="filter-tab {{currentFilter === 'discharged' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="discharged">
+        出院 ({{dischargedCount}})
+      </view>
+    </view>
+  </view>
+
+  <!-- 病人列表 -->
+  <view class="patient-list">
+    <view class="patient-item" wx:for="{{filteredPatients}}" wx:key="id" bindtap="onPatientTap" data-id="{{item.id}}">
+      <view class="patient-avatar">
+        <text class="avatar-text">{{item.name[0]}}</text>
+      </view>
+      
+      <view class="patient-info">
+        <view class="patient-header">
+          <text class="patient-name">{{item.name}}</text>
+          <view class="patient-status tag-{{item.status === '住院中' ? 'primary' : 'success'}}">
+            {{item.status}}
+          </view>
+        </view>
+        
+        <view class="patient-details">
+          <text class="detail-item">{{item.age}}岁 {{item.gender}}</text>
+          <text class="detail-item">{{item.room}}房{{item.bed}}床</text>
+        </view>
+        
+        <view class="patient-diagnosis">
+          <text class="diagnosis-text">{{item.diagnosis}}</text>
+        </view>
+        
+        <view class="patient-meta">
+          <text class="admission-date">入院: {{item.admissionDate}}</text>
+          <text class="hospital-days">住院{{item.hospitalDays}}天</text>
+        </view>
+      </view>
+      
+      <view class="patient-actions">
+        <view class="action-btn" catchtap="onQuickCheck" data-id="{{item.id}}">
+          <text class="iconfont icon-check"></text>
+          <text class="action-text">检查</text>
+        </view>
+        <view class="action-btn" catchtap="onViewDetail" data-id="{{item.id}}">
+          <text class="iconfont icon-arrow"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredPatients.length === 0}}">
+    <text class="empty-icon">👥</text>
+    <text class="empty-text">暂无病人信息</text>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="fab" bindtap="onAddPatient">
+    <text class="iconfont icon-plus"></text>
+  </view>
+</view> 

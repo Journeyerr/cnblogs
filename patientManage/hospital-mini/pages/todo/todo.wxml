@@ -1,0 +1,154 @@
+<view class="container">
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <view class="filter-tab {{currentFilter === 'all' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="all">
+      全部 ({{todos.length}})
+    </view>
+    <view class="filter-tab {{currentFilter === 'pending' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="pending">
+      待完成 ({{pendingCount}})
+    </view>
+    <view class="filter-tab {{currentFilter === 'completed' ? 'active' : ''}}" bindtap="onFilterChange" data-filter="completed">
+      已完成 ({{completedCount}})
+    </view>
+  </view>
+
+  <!-- 待办列表 -->
+  <view class="todo-list">
+    <view class="todo-item" wx:for="{{filteredTodos}}" wx:key="id">
+      <view class="todo-checkbox" bindtap="onToggleTodo" data-id="{{item.id}}">
+        <text class="checkbox-icon {{item.completed ? 'checked' : ''}}">
+          {{item.completed ? '✓' : ''}}
+        </text>
+      </view>
+      
+      <view class="todo-content" bindtap="onTodoTap" data-id="{{item.id}}">
+        <view class="todo-header">
+          <text class="todo-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+          <view class="priority-tag tag-{{item.priority}}">{{item.priorityText}}</view>
+        </view>
+        
+        <view class="todo-details">
+          <text class="todo-patient">{{item.patientName}}</text>
+          <text class="todo-time">{{item.dueTime}}</text>
+        </view>
+        
+        <view class="todo-type">
+          <text class="type-text">{{item.typeText}}</text>
+        </view>
+      </view>
+      
+      <view class="todo-actions">
+        <view class="action-btn" catchtap="onEditTodo" data-id="{{item.id}}">
+          <text class="iconfont icon-edit">✏️</text>
+        </view>
+        <view class="action-btn" catchtap="onDeleteTodo" data-id="{{item.id}}">
+          <text class="iconfont icon-delete">🗑️</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredTodos.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无待办事项</text>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="fab" bindtap="onAddTodo">
+    <text class="iconfont icon-plus">+</text>
+  </view>
+
+  <!-- 新增待办弹窗 -->
+  <view class="modal-mask" wx:if="{{showAddModal}}" bindtap="onModalMaskTap">
+    <view class="modal-content" catchtap="onModalContentTap">
+      <view class="modal-header">
+        <text class="modal-title">新增待办事项</text>
+        <view class="modal-close" bindtap="onAddModalCancel">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 事项名称 -->
+        <view class="form-item">
+          <!-- <text class="form-label">病患</text> -->
+          <input class="form-input" placeholder="病患姓名/床位" value="{{addForm.title}}" bindinput="onAddTitleInput"/>
+        </view>
+        <view class="form-item">
+          <!-- <text class="form-label">事项名称</text> -->
+          <input class="form-input" placeholder="请输入事项标题" value="{{addForm.title}}" bindinput="onAddTitleInput"/>
+        </view>
+        
+        <!-- 事项内容 -->
+        <view class="form-item">
+          <!-- <text class="form-label">事项内容</text> -->
+          <textarea class="form-textarea" placeholder="请输入事项内容" value="{{addForm.content}}" bindinput="onAddContentInput"/>
+        </view>
+        <!-- 紧急程度 -->
+        <view class="form-item">
+          <text class="form-label">紧急程度</text>
+          <view class="priority-options">
+            <view class="priority-option {{addForm.priority === 'low' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="low">
+              <text class="priority-dot low"></text>
+              <text>轻度</text>
+            </view>
+            <view class="priority-option {{addForm.priority === 'medium' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="medium">
+              <text class="priority-dot medium"></text>
+              <text>正常</text>
+            </view>
+            <view class="priority-option {{addForm.priority === 'high' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="high">
+              <text class="priority-dot high"></text>
+              <text>紧急</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 执行时间 -->
+        <view class="form-item">
+          <text class="form-label">执行时间</text>
+          <view class="time-inputs">
+            <picker class=" picker-date" mode="date" value="{{addForm.date}}" bindchange="onDateChange">
+              <view class="picker-item">
+                <text class="picker-label">日期</text>
+                <text class="picker-value">{{addForm.date || '请选择日期'}}</text>
+              </view>
+            </picker>
+            <picker class=" picker-time" mode="time" value="{{addForm.time}}" bindchange="onTimeChange">
+              <view class="picker-item">
+                <text class="picker-label">时间</text>
+                <text class="picker-value">{{addForm.time || '请选择时间'}}</text>
+              </view>
+            </picker>
+          </view>
+        </view>
+        
+        <!-- 操作标签 -->
+        <view class="form-item">
+          <view class="form-label-row">
+            <text class="form-label">操作标签</text>
+            <view class="tag-actions">
+              <text class="tag-count" wx:if="{{addForm.tags.length > 0}}">已选择 {{addForm.tags.length}} 项</text>
+              <text class="tag-action-btn" bindtap="onSelectAllTags">全选</text>
+              <text class="tag-action-btn" bindtap="onClearAllTags" wx:if="{{addForm.tags.length > 0}}">清空</text>
+            </view>
+          </view>
+          <view class="tag-options">
+            <view class="tag-option {{item.select === 1 ? 'active' : ''}}" 
+                  wx:for="{{tagOptions}}" 
+                  wx:key="value" 
+                  bindtap="onTagToggle" 
+                  data-tag="{{item.value}}"
+                  data-priority="{{item.priority}}">
+              <text class="tag-text " >{{item.label}}</text>
+              <text class="tag-check" wx:if="{{addForm.tags.includes(String(item.value))}}">✓</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="onAddModalCancel">取消</button>
+        <button class="btn-submit" bindtap="onAddModalSubmit">提交</button>
+      </view>
+    </view>
+  </view>
+</view> 
