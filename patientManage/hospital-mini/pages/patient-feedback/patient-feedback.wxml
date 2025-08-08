@@ -39,15 +39,15 @@
     <view class="form-item">
       <text class="form-label">紧急程度</text>
       <view class="urgency-selector">
-        <view class="urgency-option {{urgency === 'low' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="low">
+        <view class="urgency-option {{urgency === 1 ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="low">
           <text class="urgency-icon">🟢</text>
           <text class="urgency-text">轻微</text>
         </view>
-        <view class="urgency-option {{urgency === 'medium' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="medium">
+        <view class="urgency-option {{urgency === 2 ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="medium">
           <text class="urgency-icon">🟡</text>
           <text class="urgency-text">一般</text>
         </view>
-        <view class="urgency-option {{urgency === 'high' ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="high">
+        <view class="urgency-option {{urgency === 3 ? 'active' : ''}}" bindtap="onUrgencySelect" data-urgency="high">
           <text class="urgency-icon">🔴</text>
           <text class="urgency-text">紧急</text>
         </view>

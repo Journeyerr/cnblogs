@@ -9,10 +9,22 @@ Page({
     completedCount: 0,
     // 新增弹窗相关数据
     showAddModal: false,
-    addForm: {
+    showTodoDetail: false,
+    todoDetail:{
+      id: '',
+      targetUserName: '',
       title: '',
       content: '',
-      priority: 'medium', // 默认正常
+      priority: 1, // 默认正常
+      date: '',
+      time: '',
+      tags: []
+    },
+    addForm: {
+      targetUserName: '',
+      title: '',
+      content: '',
+      priority: 1, // 默认正常
       date: '',
       time: '',
       tags: []
@@ -32,7 +44,6 @@ Page({
 
   onLoad() {
     app.checkLoginStatus();
-    this.loadTodos();
   },
 
   onShow() {
@@ -40,34 +51,37 @@ Page({
   },
 
   loadTodos() {
-    const todos = app.getTodos();
-    
-    // 添加类型文本
-    const todosWithText = todos.map(todo => ({
-      ...todo,
-      typeText: this.getTypeText(todo.type),
-      priorityText: this.getPriorityText(todo.priority)
-    }));
+    app.get("/user/todo/list")
+    .then(res=>{
+      const todos = res.data;
+      // 添加类型文本
+      const todosWithText = todos.map(todo => ({
+        ...todo,
+        // 添加优先级文本
+        priorityText: this.getPriorityText(todo.urgency),
+        operations: this.getOperations(todo.operations)
 
-    const pendingCount = todos.filter(todo => !todo.completed).length;
-    const completedCount = todos.filter(todo => todo.completed).length;
+      }));
 
-    this.setData({
-      todos: todosWithText,
-      pendingCount,
-      completedCount
-    });
+      const pendingCount = todos.filter(todo => todo.status === 0).length;
+      const completedCount = todos.filter(todo => todo.status === 2).length;
+      this.setData({
+        todos: todosWithText,
+        pendingCount,
+        completedCount
+      });
 
-    this.filterTodos();
+      this.filterTodos();
+        console.log("todosWithText",todosWithText)
+    })
   },
 
   filterTodos() {
     let filtered = this.data.todos;
-
     if (this.data.currentFilter === 'pending') {
-      filtered = filtered.filter(todo => !todo.completed);
+      filtered = filtered.filter(todo => todo.status === 0);
     } else if (this.data.currentFilter === 'completed') {
-      filtered = filtered.filter(todo => todo.completed);
+      filtered = filtered.filter(todo => todo.status === 2);
     }
 
     this.setData({
@@ -75,21 +89,18 @@ Page({
     });
   },
 
-  getTypeText(type) {
-    const typeMap = {
-      'check': '检查',
-      'medicine': '用药',
-      'care': '护理',
-      'other': '其他'
-    };
-    return typeMap[type] || '其他';
+  getOperations(operations) {
+      if (app.isNotEmptyAndDefined(operations)) {
+          return operations.split(',');
+      }
+      return [];
   },
 
   getPriorityText(priority) {
     const priorityMap = {
-      'high': '紧急',
-      'medium': '正常',
-      'low': '轻度'
+      3: '紧急',
+      2: '正常',
+      1: '轻度'
     };
     return priorityMap[priority] || '正常';
   },
@@ -102,36 +113,58 @@ Page({
     this.filterTodos();
   },
 
-  onToggleTodo(e) {
-    const todoId = e.currentTarget.dataset.id;
-    const todos = this.data.todos;
-    const todoIndex = todos.findIndex(todo => todo.id === todoId);
-    
-    if (todoIndex !== -1) {
-      todos[todoIndex].completed = !todos[todoIndex].completed;
-      
-      this.setData({
-        todos: todos
-      });
-      
-      this.loadTodos();
-      
-      wx.showToast({
-        title: todos[todoIndex].completed ? '已完成' : '已取消完成',
-        icon: 'success'
-      });
-    }
+  // 新增待办弹窗相关方法
+  onAddTodo() {
+    // 设置默认日期为今天
+    const today = new Date();
+    const dateStr = today.toISOString().split('T')[0];
+    const timeStr = today.toISOString().split('T')[1].substr(0,5);
+    this.setData({
+      showAddModal: true,
+      addForm: {
+        targetUserName: '',
+        title: '',
+        content: '',
+        priority: 2,
+        date: dateStr,
+        time: timeStr,
+        tags: []
+      }
+    });
   },
 
-  onTodoTap(e) {
+
+  onTodoHidden() {
+    this.setData({ showTodoDetail: false, todoDetail:{} });
+  },
+
+  onTodoShow(e) {
     const todoId = e.currentTarget.dataset.id;
     const todo = this.data.todos.find(t => t.id === todoId);
-    
-    wx.showModal({
-      title: todo.title,
-      content: `病人: ${todo.patientName}\n时间: ${todo.dueTime}\n类型: ${todo.typeText}\n优先级: ${todo.priorityText}`,
-      showCancel: false
-    });
+    todo.priorityText = this.getPriorityText(todo.urgency);
+    this.setData({ showTodoDetail: true, todoDetail: todo });
+  },
+
+
+  onFinishTodo(e) {
+    const todoId = e.currentTarget.dataset.id;
+    const todo = this.data.todos.find(t => t.id === todoId);
+    console.log(todo)
+    app.post("/user/todo/update", {
+      id: todoId,
+      status: 2
+    }).then(res=>{
+      wx.showToast({
+        title: '已完成',
+        icon: 'success'
+      });
+      // 关闭弹窗
+      setTimeout(() => {
+        this.onTodoHidden();
+      }, 1000);
+
+      this.loadTodos();
+    })
   },
 
   onEditTodo(e) {
@@ -162,43 +195,21 @@ Page({
   onDeleteTodo(e) {
     const todoId = e.currentTarget.dataset.id;
     const todo = this.data.todos.find(t => t.id === todoId);
-    
+
     wx.showModal({
       title: '确认删除',
       content: `确定要删除"${todo.title}"吗？`,
       success: (res) => {
         if (res.confirm) {
-          const todos = this.data.todos.filter(t => t.id !== todoId);
-          this.setData({
-            todos: todos
-          });
-          
-          this.loadTodos();
-          
-          wx.showToast({
-            title: '删除成功',
-            icon: 'success'
-          });
+          app.post("/user/todo/delete/" + todoId, null)
+            .then(res=>{
+              this.loadTodos();
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success'
+              });
+          })
         }
-      }
-    });
-  },
-
-  // 新增待办弹窗相关方法
-  onAddTodo() {
-    // 设置默认日期为今天
-    const today = new Date();
-    const dateStr = today.toISOString().split('T')[0];
-    const timeStr = today.toISOString().split('T')[1].substr(0,5);
-    this.setData({
-      showAddModal: true,
-      addForm: {
-        title: '',
-        content: '',
-        priority: 'medium',
-        date: dateStr,
-        time: timeStr,
-        tags: []
       }
     });
   },
@@ -216,6 +227,10 @@ Page({
   },
 
   // 表单输入事件
+  onAddTargetUserNameInput(e) {
+    this.setData({ 'addForm.targetUserName': e.detail.value });
+  },
+
   onAddTitleInput(e) {
     this.setData({ 'addForm.title': e.detail.value });
   },
@@ -226,7 +241,7 @@ Page({
 
   onPrioritySelect(e) {
     const priority = e.currentTarget.dataset.priority;
-    this.setData({ 'addForm.priority': priority });
+    this.setData({ 'addForm.priority': parseInt(priority) });
   },
 
   onDateChange(e) {
@@ -251,16 +266,8 @@ Page({
     }
 
     newItems.forEach(item => {
-      console.log(item.value,tags.indexOf(item.value));
-      if (tags.indexOf(item.value) != -1) {
-        item.select = 1;
-      } else {
-        item.select = 0;
-      }
+      item.select = tags.indexOf(item.value) != -1 ? 1 : 0;
     })
-
-    console.log("全部tagOptions");
-    console.log(newItems);
 
     // 更新数据并触发视图更新
     this.setData({ 
@@ -294,9 +301,12 @@ Page({
 
   // 提交新增待办
   onAddModalSubmit() {
-    const { title, content, priority, date, time, tags } = this.data.addForm;
-    
+    const { targetUserName, title, content, priority, date, time, tags } = this.data.addForm;
     // 表单验证
+    if (!targetUserName.trim()) {
+      wx.showToast({ title: '请输入病患姓名/床位', icon: 'none' });
+      return;
+    }
     if (!title.trim()) {
       wx.showToast({ title: '请输入事项名称', icon: 'none' });
       return;
@@ -313,49 +323,31 @@ Page({
     // 构建提交数据
     const submitData = {
       title: title.trim(),
+      targetUserName: targetUserName.trim(),
       content: content.trim(),
-      priority: priority,
-      dueTime: `${date} ${time}`,
-      tags: tags,
-      completed: false
+      urgency: priority,
+      targetUserId:0,
+      executeTime: `${date} ${time}`,
+      operations: tags.join()
     };
-
-    // 调用接口
-    wx.request({
-      url: 'http://localhost:8080/api/todo',
-      method: 'POST',
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + wx.getStorageSync('token')
-      },
-      data: submitData,
-      success: (res) => {
-        console.log('新增待办响应:', res);
-        if (res.statusCode === 200 && res.data.code === 200) {
-          wx.showToast({
-            title: '添加成功',
-            icon: 'success'
-          });
-          
-          // 关闭弹窗
-          this.setData({ showAddModal: false });
-          
-          // 重新加载待办列表
-          this.loadTodos();
-        } else {
-          wx.showToast({
-            title: res.data.message || '添加失败',
-            icon: 'none'
-          });
-        }
-      },
-      fail: (err) => {
-        console.error('新增待办失败:', err);
-        wx.showToast({
-          title: '网络错误，请重试',
-          icon: 'none'
-        });
-      }
+    // 发送请求
+    app.post('/user/todo/create', submitData)
+    .then(res => {
+      wx.showToast({
+        title: '新增成功',
+        icon: 'success'
+      });
+       // 关闭弹窗
+      setTimeout(() => {
+        this.setData({ showAddModal: false });
+      }, 1000);
+       // 重新加载待办列表
+       this.loadTodos();
+    }).catch(err => {
+      wx.showToast({
+        title: res.data.message || '添加失败',
+        icon: 'error'
+      });
     });
   },
 
@@ -363,5 +355,4 @@ Page({
   getTagOptions() {
     return this.data.tagOptions;
   },
-
 }); 

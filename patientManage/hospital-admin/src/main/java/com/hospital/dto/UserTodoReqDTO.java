@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,6 +23,8 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class UserTodoReqDTO implements Serializable {
 
+    private Long id;
+    
     /**
      * 目标用户ID
      */
@@ -29,16 +33,24 @@ public class UserTodoReqDTO implements Serializable {
     /**
      * 目标用户
      */
+    @NotBlank(message = "目标用户不能为空")
     private String targetUserName;
-
+    
+    /**
+     * 状态（0-待办、1-进行中、2-已完成）
+     */
+    private Integer status;
+    
     /**
      * 待办事项名称
      */
+    @NotBlank(message = "待办事项名称不能为空")
     private String title;
 
     /**
      * 紧急程度（3-高、2-中、1-低）
      */
+    @NotNull(message = "紧急程度不能为空")
     private Integer urgency;
 
     /**
@@ -49,6 +61,7 @@ public class UserTodoReqDTO implements Serializable {
     /**
      * 执行时间
      */
+    @NotNull(message = "执行时间不能为空")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private LocalDateTime executeTime;
 

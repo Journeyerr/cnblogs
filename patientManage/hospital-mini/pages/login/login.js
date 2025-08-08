@@ -160,45 +160,24 @@ Page({
       title: '登录中...'
     });
 
-    wx.request({
-      url: 'http://localhost:8080/api/auth/login',
-      method: 'POST',
-    
-      data: {
-        username: phone,
-        password: password
-      },
-      success: (res) => {
-        console.log(res);
-        if (res.data.code === 200) {
-          
-          const data = res.data.data;
-          const userInfo = {
-            name: data.username,
-            id: data.id,
-            phone: data.phone,
-            realName: data.realName
-          }
-          wx.setStorageSync('token', data.token);
-          wx.setStorageSync('userInfo', userInfo);
-          app.globalData.userInfo = userInfo;
-          app.globalData.isNurse = true;
-          wx.hideLoading();
-          this.redirectToHome();
-        } else {
-          wx.showToast({
-            title: res.data.message,
-            icon: 'none'
-          });
+    app.post('/api/auth/login', {
+      username: phone,
+      password: password
+    }).then(res=>{
+        const data = res.data;
+        const userInfo = {
+          name: data.username,
+          id: data.id,
+          phone: data.phone,
+          realName: data.realName
         }
-      },
-      fail: (err) => {
-        wx.showToast({
-          title: '登录失败',
-          icon: 'none'
-        });
-      }
-    });
+        wx.setStorageSync('token', data.token);
+        wx.setStorageSync('userInfo', userInfo);
+        app.globalData.userInfo = userInfo;
+        app.globalData.isNurse = true;
+        wx.hideLoading();
+        this.redirectToHome();
+    })
   },
 
   onWechatLogin() {

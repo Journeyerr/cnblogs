@@ -6,12 +6,10 @@ import com.hospital.dto.UserTodoReqDTO;
 import com.hospital.service.UserTodoService;
 import com.hospital.vo.UserTodoVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -28,9 +26,24 @@ public class UserTodoController {
     @Autowired
     private UserTodoService userTodoService;
     
-    @RequestMapping("/create")
-    public ApiResponse<UserTodoVO> createUserTodo(@Valid @RequestBody UserTodoReqDTO userTodoReqDTO) {
-        return ApiResponse.success(userTodoService.createUserTodo(userTodoReqDTO));
+    @PostMapping("/create")
+    public ApiResponse<UserTodoVO> create(@Valid @RequestBody UserTodoReqDTO userTodoReqDTO) {
+        return ApiResponse.success(userTodoService.create(userTodoReqDTO));
+    }
+    
+    @GetMapping("/list")
+    public ApiResponse<List<UserTodoVO>> list(@RequestParam(required = false) Integer status) {
+        return ApiResponse.success(userTodoService.list(status));
+    }
+    
+    @PostMapping("/update")
+    public ApiResponse<UserTodoVO> update(@RequestBody UserTodoReqDTO userTodoReqDTO) {
+        return ApiResponse.success(userTodoService.update(userTodoReqDTO));
+    }
+    
+    @PostMapping("/delete/{id}")
+    public ApiResponse<Boolean> update(@PathVariable Long id) {
+        return ApiResponse.success(userTodoService.delete(id));
     }
 }
 

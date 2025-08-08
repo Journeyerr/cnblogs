@@ -1,3 +1,6 @@
+import { postRequest, getRequest } from './utils/request';
+import { isNotEmptyAndDefined } from './utils/string';
+
 App({
   globalData: {
     userInfo: null,
@@ -7,6 +10,10 @@ App({
     todos: [],
     news: []
   },
+
+  post:postRequest,
+  get:getRequest,
+  isNotEmptyAndDefined:isNotEmptyAndDefined,
 
   onLaunch() {
     // 检查登录状态
@@ -82,7 +89,7 @@ App({
         patientId: 1,
         patientName: '张三',
         type: 'check',
-        priority: 'high',
+        priority: 3,
         dueTime: '14:00',
         completed: false
       },
@@ -92,7 +99,7 @@ App({
         patientId: 2,
         patientName: '李四',
         type: 'medicine',
-        priority: 'medium',
+        priority: 2,
         dueTime: '16:00',
         completed: false
       }
@@ -146,4 +153,6 @@ App({
       patient.latestCheck = { ...patient.latestCheck, ...checkData };
     }
   }
+
+  
 }); 

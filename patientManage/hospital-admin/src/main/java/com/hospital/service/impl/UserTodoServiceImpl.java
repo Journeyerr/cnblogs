@@ -1,5 +1,6 @@
 package com.hospital.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hospital.dto.UserTodoReqDTO;
 import com.hospital.exception.AppException;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,11 +36,7 @@ public class UserTodoServiceImpl extends ServiceImpl<UserTodoMapper, UserTodo> i
     private HttpServletRequest httpServletRequest;
     
     @Override
-    public UserTodoVO createUserTodo(UserTodoReqDTO userTodoReqDTO) {
-        
-        if (userTodoReqDTO == null) {
-            throw new AppException("参数错误");
-        }
+    public UserTodoVO create(UserTodoReqDTO userTodoReqDTO) {
         
         UserTodo userTodo = new UserTodo();
         BeanUtils.copyProperties(userTodoReqDTO, userTodo);
@@ -51,5 +51,62 @@ public class UserTodoServiceImpl extends ServiceImpl<UserTodoMapper, UserTodo> i
         BeanUtils.copyProperties(userTodo, userTodoVO);
         
         return userTodoVO;
+    }
+    
+    @Override
+    public List<UserTodoVO> list(Integer status) {
+        Long id = UserTokenUtil.currentUser().getId();
+        
+        LambdaQueryWrapper<UserTodo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserTodo::getCreateUserId, id);
+        if (null != status) {
+            queryWrapper.eq(UserTodo::getStatus, status);
+        }
+        List<UserTodo> list = list(queryWrapper.orderByAsc(UserTodo::getStatus).orderByDesc(UserTodo::getUrgency));
+        
+        return list.stream().map(userTodo -> {
+            UserTodoVO userTodoVO = new UserTodoVO();
+            BeanUtils.copyProperties(userTodo, userTodoVO);
+            return userTodoVO;
+        }).collect(Collectors.toList());
+    }
+    
+    @Override
+    public UserTodoVO update(UserTodoReqDTO userTodoReqDTO) {
+        if (null == userTodoReqDTO.getId()) {
+            throw new AppException("待办事项ID不能为空");
+        }
+        
+        UserTodo userTodo = getById(userTodoReqDTO.getId());
+        
+        if (null == userTodo || !Objects.equals(userTodo.getCreateUserId(), UserTokenUtil.currentUser().getId())) {
+            throw new AppException("待办事项不存在");
+        }
+        if (null != userTodoReqDTO.getStatus()) {
+            userTodo.setStatus(userTodoReqDTO.getStatus());
+        }
+        if (null != userTodoReqDTO.getTitle()) {
+            userTodo.setTitle(userTodoReqDTO.getTitle());
+        }
+        if (null != userTodoReqDTO.getExecuteTime()) {
+            userTodo.setExecuteTime(userTodoReqDTO.getExecuteTime());
+        }
+        
+        updateById(userTodo);
+        
+        UserTodoVO userTodoVO = new UserTodoVO();
+        BeanUtils.copyProperties(userTodo, userTodoVO);
+        return userTodoVO;
+    }
+    
+    @Override
+    public Boolean delete(Long id) {
+        UserTodo userTodo = getById(id);
+        
+        if (null == userTodo || !Objects.equals(userTodo.getCreateUserId(), UserTokenUtil.currentUser().getId())) {
+            throw new AppException("待办事项不存在");
+        }
+       
+        return removeById(id);
     }
 }

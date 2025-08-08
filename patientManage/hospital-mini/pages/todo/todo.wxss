@@ -63,9 +63,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24rpx;
+  text-align: center;
+  font-size:30rpx;
+  line-height: 1;
   color: #FFFFFF;
   background: #DDDDDD;
+}
+
+.todo-checkbox-icon {
+  width: 45rpx;
+  height: 45rpx;
+  padding: 2rpx 2rpx;
 }
 
 .checkbox-icon.checked {
@@ -124,6 +132,7 @@
   color: #4A90E2;
   background: #E3F2FD;
   padding: 4rpx 12rpx;
+  margin: 0 4rpx;
   border-radius: 12rpx;
 }
 
@@ -179,19 +188,19 @@
 }
 
 /* 标签样式 */
-.tag-high {
+.tag-3 {
   background: #FFEBEE;
   color: #FF4757;
 }
 
-.tag-medium {
+.tag-2 {
   background: #FFF3E0;
   color: #FFA502;
 }
 
-.tag-low {
+.tag-1 {
   background: #E8F5E8;
-  color: #2ED573;
+  color: mediumseagreen;
 }
 
 /* 弹窗样式 */
@@ -404,6 +413,18 @@
   background: #FF4757;
 }
 
+.priority-dot-1 {
+  background: #2ED573;
+}
+
+.priority-dot-2 {
+  background: #FFA502;
+}
+
+.priority-dot-3 {
+  background: #FF4757;
+}
+
 /* 操作标签选择 */
 .tag-options {
   display: flex;
@@ -433,6 +454,7 @@
 
 .tag-text {
   flex: 1;
+
 }
 
 /* 勾选标识样式 */

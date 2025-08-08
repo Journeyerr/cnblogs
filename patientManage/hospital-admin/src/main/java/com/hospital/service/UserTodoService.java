@@ -5,6 +5,8 @@ import com.hospital.model.entity.UserTodo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hospital.vo.UserTodoVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 待办事项表 服务类
@@ -15,5 +17,11 @@ import com.hospital.vo.UserTodoVO;
  */
 public interface UserTodoService extends IService<UserTodo> {
 
-    UserTodoVO createUserTodo(UserTodoReqDTO userTodoReqDTO);
+    UserTodoVO create(UserTodoReqDTO userTodoReqDTO);
+    
+    List<UserTodoVO> list(Integer status);
+    
+    UserTodoVO update(UserTodoReqDTO userTodoReqDTO);
+    
+    Boolean delete(Long id);
 }

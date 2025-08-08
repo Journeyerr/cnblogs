@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class UserTodoVO implements Serializable {
 
+    private Long id;
+    
     /**
      * 目标用户ID
      */
@@ -41,6 +43,11 @@ public class UserTodoVO implements Serializable {
     private Integer urgency;
 
     /**
+     * 状态（0-待办、1-进行中、2-已完成）
+     */
+    private Integer status;
+
+    /**
      * 代办事项内容
      */
     private String content;
@@ -48,7 +55,7 @@ public class UserTodoVO implements Serializable {
     /**
      * 执行时间
      */
-    @JsonFormat(pattern = "mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "GMT+8")
     private LocalDateTime executeTime;
 
     /**

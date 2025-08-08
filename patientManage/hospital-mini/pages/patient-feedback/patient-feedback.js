@@ -4,7 +4,7 @@ Page({
   data: {
     content: '',
     selectedSymptoms: [],
-    urgency: 'medium',
+    urgency: 2,
     phone: '',
     canSubmit: false,
     feedbackHistory: []
@@ -119,7 +119,7 @@ Page({
         feedbackHistory: feedbackHistory,
         content: '',
         selectedSymptoms: [],
-        urgency: 'medium',
+        urgency: 2,
         phone: ''
       });
       

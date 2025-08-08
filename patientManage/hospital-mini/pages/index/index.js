@@ -67,9 +67,9 @@ Page({
 
   getPriorityText(priority) {
     const priorityMap = {
-      'high': '紧急',
-      'medium': '一般',
-      'low': '普通'
+      3: '紧急',
+      2: '一般',
+      1: '普通'
     };
     return priorityMap[priority] || '普通';
   },

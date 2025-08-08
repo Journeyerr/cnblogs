@@ -175,26 +175,13 @@ Page({
       success: (res) => {
         if (res.confirm) {
           // 调用登出接口
-          wx.request({
-            url: 'http://localhost:8080/api/auth/logout',
-            method: 'POST',
-            header: {
-              'Authorization': 'Bearer ' + wx.getStorageSync('token')
-            },
-            success: (apiRes) => {
-              console.log(apiRes);
+          app.post('/api/auth/logout')
+            .then(res => {
+              console.log(res);
               app.clearLoginInfo();
               wx.redirectTo({
                 url: '/pages/login/login'
               });
-            },
-            fail: () => {
-              console.log('登出失败，请重试登出失败，请重试登出失败，请重试');
-              wx.showToast({
-                title: '登出失败，请重试',
-                icon: 'none'
-              });
-            }
           });
         }
       }

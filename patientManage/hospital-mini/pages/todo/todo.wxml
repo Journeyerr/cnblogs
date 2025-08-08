@@ -16,31 +16,31 @@
   <view class="todo-list">
     <view class="todo-item" wx:for="{{filteredTodos}}" wx:key="id">
       <view class="todo-checkbox" bindtap="onToggleTodo" data-id="{{item.id}}">
-        <text class="checkbox-icon {{item.completed ? 'checked' : ''}}">
-          {{item.completed ? '✓' : ''}}
+        <text class="checkbox-icon todo-checkbox-icon {{item.status === 0 ? 'checked' : ''}}">
+          {{item.targetUserName}}
         </text>
       </view>
       
-      <view class="todo-content" bindtap="onTodoTap" data-id="{{item.id}}">
+      <view class="todo-content" bindtap="onTodoShow" data-id="{{item.id}}">
         <view class="todo-header">
-          <text class="todo-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
-          <view class="priority-tag tag-{{item.priority}}">{{item.priorityText}}</view>
+          <text class="todo-title {{item.status === 2 ? 'completed' : ''}}">{{item.title}}</text>
+          <view class="priority-tag tag-{{item.urgency}}">{{item.priorityText}}</view>
         </view>
         
         <view class="todo-details">
-          <text class="todo-patient">{{item.patientName}}</text>
-          <text class="todo-time">{{item.dueTime}}</text>
+          <text class="todo-patient">{{item.targetUserName}}</text>
+          <text class="todo-time">{{item.executeTime}}</text>
         </view>
-        
+
         <view class="todo-type">
-          <text class="type-text">{{item.typeText}}</text>
+          <text class="type-text" wx:for="{{item.operations}}" wx:key="opId" wx:for-item="operation">{{operation}}</text>
         </view>
       </view>
-      
+
       <view class="todo-actions">
-        <view class="action-btn" catchtap="onEditTodo" data-id="{{item.id}}">
-          <text class="iconfont icon-edit">✏️</text>
-        </view>
+<!--        <view class="action-btn" catchtap="onEditTodo" data-id="{{item.id}}">-->
+<!--          <text class="iconfont icon-edit">✏️</text>-->
+<!--        </view>-->
         <view class="action-btn" catchtap="onDeleteTodo" data-id="{{item.id}}">
           <text class="iconfont icon-delete">🗑️</text>
         </view>
@@ -59,6 +59,66 @@
     <text class="iconfont icon-plus">+</text>
   </view>
 
+    <!-- 待办事项弹窗 -->
+    <view class="modal-mask" wx:if="{{showTodoDetail}}" >
+        <view class="modal-content" catchtap="onModalContentTap">
+            <view class="modal-header">
+                <text class="modal-title">待办详情</text>
+                <view class="modal-close" bindtap="onTodoHidden">×</view>
+            </view>
+
+            <view class="modal-body">
+                <!-- 事项名称 -->
+                <view class="form-item">
+                    <!-- <text class="form-label">病患</text> -->
+                    <input class="form-input" disabled value="{{todoDetail.targetUserName}}"/>
+                </view>
+                <view class="form-item">
+                    <!-- <text class="form-label">事项名称</text> -->
+                    <input class="form-input" disabled value="{{todoDetail.title}}"/>
+                </view>
+
+                <!-- 事项内容 -->
+                <view class="form-item">
+                    <!-- <text class="form-label">事项内容</text> -->
+                    <textarea class="form-textarea" disabled value="{{todoDetail.content}}"/>
+                </view>
+                <!-- 紧急程度 -->
+                <view class="form-item">
+                    <view class="priority-options">
+                        <view class="priority-option active" >
+                            <text class="priority-dot priority-dot-{{todoDetail.urgency}}"></text>
+                            <text>{{todoDetail.priorityText}}</text>
+                        </view>
+                    </view>
+                </view>
+
+                <!-- 事项名称 -->
+                <view class="form-item">
+                    <text class="form-label">执行时间</text>
+                    <!-- <text class="form-label">病患</text> -->
+                    <input class="form-input" disabled value="{{todoDetail.executeTime}}"/>
+                </view>
+
+                <!-- 操作标签 -->
+                <view class="form-item">
+                    <view class="tag-options">
+                        <view class="tag-option active" wx:for="{{todoDetail.operations}}" wx:key="opId" wx:for-item="value">
+                            <text class="tag-text " >{{value}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+            <view class="modal-footer">
+                <button class="btn-cancel" wx:if="{{todoDetail.status === 0}}" bindtap="onTodoHidden">取消</button>
+                <button class="btn-submit" wx:if="{{todoDetail.status === 0}}" bindtap="onFinishTodo" data-id="{{todoDetail.id}}">完成</button>
+                <button class="btn-submit" wx:if="{{todoDetail.status === 2}}">已完成</button>
+            </view>
+        </view>
+    </view>
+
+
   <!-- 新增待办弹窗 -->
   <view class="modal-mask" wx:if="{{showAddModal}}" bindtap="onModalMaskTap">
     <view class="modal-content" catchtap="onModalContentTap">
@@ -66,18 +126,18 @@
         <text class="modal-title">新增待办事项</text>
         <view class="modal-close" bindtap="onAddModalCancel">×</view>
       </view>
-      
+
       <view class="modal-body">
         <!-- 事项名称 -->
         <view class="form-item">
           <!-- <text class="form-label">病患</text> -->
-          <input class="form-input" placeholder="病患姓名/床位" value="{{addForm.title}}" bindinput="onAddTitleInput"/>
+          <input class="form-input" placeholder="病患姓名/床位" value="{{addForm.targetUserName}}" bindinput="onAddTargetUserNameInput"/>
         </view>
         <view class="form-item">
           <!-- <text class="form-label">事项名称</text> -->
           <input class="form-input" placeholder="请输入事项标题" value="{{addForm.title}}" bindinput="onAddTitleInput"/>
         </view>
-        
+
         <!-- 事项内容 -->
         <view class="form-item">
           <!-- <text class="form-label">事项内容</text> -->
@@ -87,21 +147,21 @@
         <view class="form-item">
           <text class="form-label">紧急程度</text>
           <view class="priority-options">
-            <view class="priority-option {{addForm.priority === 'low' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="low">
+            <view class="priority-option {{addForm.priority === 1 ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="1">
               <text class="priority-dot low"></text>
               <text>轻度</text>
             </view>
-            <view class="priority-option {{addForm.priority === 'medium' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="medium">
+            <view class="priority-option {{addForm.priority === 2 ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="2">
               <text class="priority-dot medium"></text>
               <text>正常</text>
             </view>
-            <view class="priority-option {{addForm.priority === 'high' ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="high">
+            <view class="priority-option {{addForm.priority === 3 ? 'active' : ''}}" bindtap="onPrioritySelect" data-priority="3">
               <text class="priority-dot high"></text>
               <text>紧急</text>
             </view>
           </view>
         </view>
-        
+
         <!-- 执行时间 -->
         <view class="form-item">
           <text class="form-label">执行时间</text>
@@ -120,7 +180,7 @@
             </picker>
           </view>
         </view>
-        
+
         <!-- 操作标签 -->
         <view class="form-item">
           <view class="form-label-row">
@@ -132,10 +192,10 @@
             </view>
           </view>
           <view class="tag-options">
-            <view class="tag-option {{item.select === 1 ? 'active' : ''}}" 
-                  wx:for="{{tagOptions}}" 
-                  wx:key="value" 
-                  bindtap="onTagToggle" 
+            <view class="tag-option {{item.select === 1 ? 'active' : ''}}"
+                  wx:for="{{tagOptions}}"
+                  wx:key="value"
+                  bindtap="onTagToggle"
                   data-tag="{{item.value}}"
                   data-priority="{{item.priority}}">
               <text class="tag-text " >{{item.label}}</text>
@@ -144,7 +204,7 @@
           </view>
         </view>
       </view>
-      
+
       <view class="modal-footer">
         <button class="btn-cancel" bindtap="onAddModalCancel">取消</button>
         <button class="btn-submit" bindtap="onAddModalSubmit">提交</button>

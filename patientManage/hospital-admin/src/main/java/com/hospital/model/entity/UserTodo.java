@@ -59,7 +59,7 @@ public class UserTodo implements Serializable {
     /**
      * 状态（0-待办、1-进行中、2-已完成）
      */
-    private String status;
+    private Integer status;
 
     /**
      * 代办事项内容
